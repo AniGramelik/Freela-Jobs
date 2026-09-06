@@ -151,13 +151,35 @@ model ProfessionalProfile {
   ownerUserId        String?                  @unique
   firstContactedAt   DateTime?
   mergedIntoId       String? // preenchido quando state = MERGED (ticket 12)
+  availableNowUntil  DateTime? // "disponível agora" com expiração (ticket 13)
   createdAt          DateTime                 @default(now())
 
-  relationships WorkRelationship[]
-  categories    ProfessionalProfileCategory[]
-  invites       Invite[]
+  relationships       WorkRelationship[]
+  categories          ProfessionalProfileCategory[]
+  invites             Invite[]
+  availabilityWindows AvailabilityWindow[]
 
   @@index([phoneE164])
+}
+
+// --- Disponibilidade do profissional (ticket 13) ---
+
+enum AvailabilityShift {
+  MORNING
+  AFTERNOON
+  NIGHT
+}
+
+model AvailabilityWindow {
+  id                    String            @id @default(cuid())
+  professionalProfileId String
+  weekday               Int // 0 = domingo … 6 = sábado
+  shift                 AvailabilityShift
+
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([professionalProfileId, weekday, shift])
+  @@index([professionalProfileId])
 }
 
 // --- Convite para assumir o perfil (ADR-0003, ticket 10) ---
