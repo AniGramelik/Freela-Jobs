@@ -1,0 +1,43 @@
+name: Backup Postgres
+
+# Cópia diária fora do provedor, como reforço. A fonte primária de backup é o
+# provedor gerenciado (Neon/Supabase) — ver runbooks/backup.md.
+# Requer o secret PRODUCTION_DATABASE_URL.
+
+on:
+  schedule:
+    - cron: "17 4 * * *" # diário às 04:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  dump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Verifica secret
+        run: |
+          if [ -z "${PRODUCTION_DATABASE_URL}" ]; then
+            echo "::error::PRODUCTION_DATABASE_URL não configurado." && exit 1
+          fi
+        env:
+          PRODUCTION_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+      - name: pg_dump (formato custom)
+        run: |
+          ts=$(date -u +%Y%m%dT%H%M%SZ)
+          pg_dump --format=custom --no-owner --no-privileges \
+            --file="freela-jobs-${ts}.dump" "${PRODUCTION_DATABASE_URL}"
+          ls -lh "freela-jobs-${ts}.dump"
+        env:
+          PRODUCTION_DATABASE_URL: ${{ secrets.PRODUCTION_DATABASE_URL }}
+
+      - name: Upload (retenção 7 dias)
+        uses: actions/upload-artifact@v4
+        with:
+          name: postgres-backup
+          path: "*.dump"
+          retention-days: 7
+          if-no-files-found: error
