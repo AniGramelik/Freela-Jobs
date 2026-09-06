@@ -1,0 +1,27 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Trilha de auditoria imutável (ADR-0002, ADR-0004).
+/// A regra de append-only (sem update/delete) é imposta na camada de
+/// aplicação no ticket 04; aqui só a tabela existe.
+model AuditLog {
+  id          String   @id @default(cuid())
+  actorUserId String?
+  actingAs    String?
+  action      String
+  targetType  String
+  targetId    String?
+  before      Json?
+  after       Json?
+  createdAt   DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([actorUserId])
+  @@index([createdAt])
+}
