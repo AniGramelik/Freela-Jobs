@@ -1,0 +1,75 @@
+name: CI
+
+# Roda em todo PR e no push para main. Alvo de tempo: <= 5 min.
+# O gate de branch ("PR com erro de tipo ou teste falho é bloqueado") é uma
+# configuração do repositório no GitHub, não deste arquivo — ver README,
+# seção "CI e proteção de branch".
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write # comentário de cobertura no PR
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: freela
+          POSTGRES_PASSWORD: freela
+          POSTGRES_DB: freela_jobs_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U freela -d freela_jobs_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://freela:freela@localhost:5432/freela_jobs_test?schema=public
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Prisma client
+        run: npx prisma generate
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Migrations (banco efêmero)
+        run: npm run db:deploy
+
+      - name: Tests + coverage
+        run: npm run test:coverage
+
+      - name: Build
+        run: npm run build
+
+      - name: Coverage report (PR)
+        if: ${{ !cancelled() && github.event_name == 'pull_request' }}
+        uses: davelosert/vitest-coverage-report-action@v2

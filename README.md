@@ -98,6 +98,23 @@ Passo manual único (precisa da conta Vercel + repositório no GitHub):
 O build de produção da Vercel deve rodar `npm run db:deploy` antes de `next build`
 (configurar em Build Command ou num passo de CI — ver ticket 02).
 
+## CI e proteção de branch
+
+O workflow [`.github/workflows/ci.yml`](./.github/workflows/ci.yml) roda em todo
+PR e no push para `main`: `install → prisma generate → lint → typecheck →
+migrate (Postgres efêmero de serviço) → test + coverage → build`. Um comentário
+de cobertura é postado no PR; o job falha se a cobertura de `src/domain/**` cair
+abaixo de 80%.
+
+**Passo manual único** (proteção de branch, feita nas configurações do GitHub):
+
+1. Settings → Branches → Add branch ruleset para `main`.
+2. Exigir PR antes do merge e marcar **"Require status checks to pass"** →
+   selecionar o check **`verify`**.
+3. Opcional: "Require branches to be up to date before merging".
+
+Sem isso, o CI roda mas não bloqueia merge.
+
 ## Notas de segurança (dependências)
 
 `npm audit` reporta pendências **apenas em ferramentas de desenvolvimento**
