@@ -1,18 +1,31 @@
-import { requireSession } from "@/lib/session";
+import Link from "next/link";
+
+import { requireCompanyContext } from "@/lib/session";
+
+import { CompanySwitcher } from "./CompanySwitcher";
 
 export const dynamic = "force-dynamic";
 
 export default async function PainelPage() {
-  const user = await requireSession();
-  const company = user.companies[0];
+  const { user, company } = await requireCompanyContext();
 
   return (
     <main>
       <h1>Painel</h1>
       <p>
-        Olá, {user.email}
-        {company ? ` — ${company.name}` : ""}.
+        Olá, {user.email} — {company.name} ({company.role}).
       </p>
+
+      <CompanySwitcher companies={user.companies} activeId={company.id} />
+
+      <nav>
+        <ul>
+          <li>
+            <Link href="/painel/equipe">Equipe (acervo de profissionais)</Link>
+          </li>
+        </ul>
+      </nav>
+
       <form action="/sair" method="post">
         <button type="submit">Sair</button>
       </form>

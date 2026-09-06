@@ -21,6 +21,7 @@ export async function createSession(
 export type ResolvedSession = {
   userId: string;
   sessionId: string;
+  activeCompanyId: string | null;
   expiresAt: Date;
 };
 
@@ -56,7 +57,12 @@ export async function resolveSession(
     });
   }
 
-  return { userId: session.userId, sessionId: session.id, expiresAt };
+  return {
+    userId: session.userId,
+    sessionId: session.id,
+    activeCompanyId: session.activeCompanyId,
+    expiresAt,
+  };
 }
 
 export async function destroySession(

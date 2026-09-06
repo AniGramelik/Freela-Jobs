@@ -1,7 +1,9 @@
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+import type { CompanyOption } from "@/domain/company-context";
 import { prisma } from "@/lib/prisma";
+import { loadSessionContext } from "@/use-cases/company-context";
 import { resolveSession } from "@/use-cases/session";
 
 const COOKIE = "fj_session";
@@ -28,7 +30,9 @@ export async function readSessionToken(): Promise<string | undefined> {
 export type SessionUser = {
   id: string;
   email: string;
-  companies: { id: string; name: string; role: "OWNER" | "MANAGER" }[];
+  sessionId: string;
+  companies: CompanyOption[];
+  activeCompany: CompanyOption | null;
 };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
@@ -38,20 +42,18 @@ export async function getSessionUser(): Promise<SessionUser | null> {
   const resolved = await resolveSession(prisma, { token });
   if (!resolved) return null;
 
-  const user = await prisma.user.findUnique({
-    where: { id: resolved.userId },
-    include: { memberships: { include: { company: true } } },
+  const context = await loadSessionContext(prisma, {
+    userId: resolved.userId,
+    storedActiveCompanyId: resolved.activeCompanyId,
   });
-  if (!user) return null;
+  if (!context) return null;
 
   return {
-    id: user.id,
-    email: user.email,
-    companies: user.memberships.map((m) => ({
-      id: m.company.id,
-      name: m.company.name,
-      role: m.role,
-    })),
+    id: context.user.id,
+    email: context.user.email,
+    sessionId: resolved.sessionId,
+    companies: context.companies,
+    activeCompany: context.activeCompany,
   };
 }
 
@@ -59,4 +61,16 @@ export async function requireSession(): Promise<SessionUser> {
   const user = await getSessionUser();
   if (!user) redirect("/entrar");
   return user;
+}
+
+export type CompanyContext = {
+  user: SessionUser;
+  company: CompanyOption;
+};
+
+/** Sessão + empresa ativa garantidas. Base de tudo que escreve dado de empresa. */
+export async function requireCompanyContext(): Promise<CompanyContext> {
+  const user = await requireSession();
+  if (!user.activeCompany) redirect("/entrar");
+  return { user, company: user.activeCompany };
 }

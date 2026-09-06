@@ -30,7 +30,8 @@ model Company {
   name      String
   createdAt DateTime @default(now())
 
-  memberships CompanyMembership[]
+  memberships   CompanyMembership[]
+  relationships WorkRelationship[]
 }
 
 model CompanyMembership {
@@ -48,12 +49,13 @@ model CompanyMembership {
 }
 
 model Session {
-  id         String   @id @default(cuid())
-  userId     String
-  tokenHash  String   @unique
-  createdAt  DateTime @default(now())
-  lastSeenAt DateTime @default(now())
-  expiresAt  DateTime
+  id              String   @id @default(cuid())
+  userId          String
+  tokenHash       String   @unique
+  activeCompanyId String? // empresa "agindo como" (ticket 07)
+  createdAt       DateTime @default(now())
+  lastSeenAt      DateTime @default(now())
+  expiresAt       DateTime
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -80,6 +82,58 @@ model MagicLinkToken {
   createdAt DateTime  @default(now())
 
   @@index([email])
+}
+
+// --- Base privada de profissionais (ADR-0003, ticket 08) ---
+
+enum ProfessionalProfileState {
+  MANAGED
+  INVITED
+  CLAIMED
+  ANONYMIZED
+  MERGED
+}
+
+model ProfessionalProfile {
+  id                 String                   @id @default(cuid())
+  state              ProfessionalProfileState @default(MANAGED)
+  fullName           String
+  phoneE164          String
+  email              String?
+  createdByCompanyId String
+  sourceNote         String?
+  ownerUserId        String?                  @unique
+  firstContactedAt   DateTime?
+  createdAt          DateTime                 @default(now())
+
+  relationships WorkRelationship[]
+
+  // Dedupe por telefone é imposto na camada de aplicação enquanto o perfil não
+  // está CLAIMED; a unicidade por telefone verificado entra no ticket 12.
+  @@index([phoneE164])
+}
+
+enum WorkRelationshipState {
+  ACTIVE
+  PENDING_CONSENT
+  ARCHIVED
+}
+
+model WorkRelationship {
+  id                    String                @id @default(cuid())
+  companyId             String
+  professionalProfileId String
+  state                 WorkRelationshipState @default(ACTIVE)
+  roles                 String[]
+  privateNote           String?
+  createdAt             DateTime              @default(now())
+
+  company             Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([companyId, professionalProfileId])
+  @@index([companyId])
+  @@index([professionalProfileId])
 }
 
 /// Janela fixa de rate limit por chave (ex.: "magiclink:email@x").
