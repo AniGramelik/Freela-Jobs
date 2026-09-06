@@ -4,7 +4,8 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   plugins: [tsconfigPaths()],
   test: {
-    teardownTimeout: 30_000,
+    // embedded-postgres pode demorar a encerrar no Windows; limita a espera.
+    teardownTimeout: 15_000,
     projects: [
       {
         extends: true,
