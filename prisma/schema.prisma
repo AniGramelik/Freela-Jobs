@@ -7,6 +7,88 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// --- Identidade e tenancy (ADR-0002, ticket 06) ---
+
+enum CompanyRole {
+  OWNER
+  MANAGER
+}
+
+model User {
+  id              String    @id @default(cuid())
+  email           String    @unique // sempre normalizado (minúsculo, trim)
+  passwordHash    String?
+  emailVerifiedAt DateTime?
+  createdAt       DateTime  @default(now())
+
+  memberships CompanyMembership[]
+  sessions    Session[]
+}
+
+model Company {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now())
+
+  memberships CompanyMembership[]
+}
+
+model CompanyMembership {
+  id        String      @id @default(cuid())
+  userId    String
+  companyId String
+  role      CompanyRole
+  createdAt DateTime    @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, companyId])
+  @@index([companyId])
+}
+
+model Session {
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  expiresAt  DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model EmailVerificationToken {
+  id        String    @id @default(cuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId])
+}
+
+model MagicLinkToken {
+  id        String    @id @default(cuid())
+  email     String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([email])
+}
+
+/// Janela fixa de rate limit por chave (ex.: "magiclink:email@x").
+model RateLimitBucket {
+  key       String   @id
+  count     Int      @default(0)
+  windowEnd DateTime
+}
+
 /// Trilha de auditoria imutável (ADR-0002, ADR-0004).
 /// A regra de append-only (sem update/delete) é imposta na camada de
 /// aplicação no ticket 04; aqui só a tabela existe.
@@ -24,4 +106,72 @@ model AuditLog {
   @@index([targetType, targetId])
   @@index([actorUserId])
   @@index([createdAt])
+}
+
+// --- Notificação e outbox (ADR-0004, ticket 05) ---
+
+enum OutboxStatus {
+  PENDING
+  PROCESSING
+  DONE
+  DEAD
+}
+
+/// Intenção de efeito colateral gravada na MESMA transação de negócio.
+/// Um worker (`processOutboxOnce`) despacha depois, com retry e idempotência.
+model OutboxMessage {
+  id          String       @id @default(cuid())
+  topic       String
+  payload     Json
+  dedupeKey   String       @unique
+  status      OutboxStatus @default(PENDING)
+  attempts    Int          @default(0)
+  lastError   String?
+  claimId     String?
+  claimedAt   DateTime?
+  nextRetryAt DateTime     @default(now())
+  createdAt   DateTime     @default(now())
+  processedAt DateTime?
+
+  @@index([status, nextRetryAt])
+}
+
+enum NotificationChannel {
+  EMAIL
+  PUSH
+}
+
+enum NotificationStatus {
+  SENT
+  DELIVERED
+  FAILED
+  OPENED
+}
+
+/// Registro de cada tentativa de entrega, por canal.
+model NotificationLog {
+  id          String              @id @default(cuid())
+  outboxId    String?
+  recipient   String
+  channel     NotificationChannel
+  category    String
+  status      NotificationStatus
+  providerId  String?
+  error       String?
+  createdAt   DateTime            @default(now())
+  deliveredAt DateTime?
+  openedAt    DateTime?
+
+  @@index([recipient])
+  @@index([outboxId])
+}
+
+/// Opt-out por categoria. Categorias transacionais são ignoradas aqui
+/// (a regra é imposta em `src/domain/notifications.ts`).
+model NotificationOptOut {
+  subjectId String
+  category  String
+  createdAt DateTime @default(now())
+
+  @@id([subjectId, category])
 }
