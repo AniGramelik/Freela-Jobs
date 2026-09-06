@@ -5,13 +5,13 @@ válido para assumir o perfil; a empresa reenvia ou revoga quando precisa.
 
 **Bloqueado por:** 08, 05.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `Invite` (token alta entropia, uso único, não enumerável, validade 60
+- [x] `Invite` (token alta entropia, uso único, não enumerável, validade 60
       dias). Estados `PENDING → ACCEPTED | EXPIRED | REVOKED`.
-- [ ] Envio por e-mail via Notifier/outbox; reenvio gera novo token e invalida o
+- [x] Envio por e-mail via Notifier/outbox; reenvio gera novo token e invalida o
       anterior; revogação pela empresa.
-- [ ] Primeiro envio marca `firstContactedAt` no perfil.
-- [ ] Convite expirado ou revogado não permite claim.
-- [ ] Teste: enumeração de token inviável e limitada; reenvio invalida o
+- [x] Primeiro envio marca `firstContactedAt` no perfil.
+- [x] Convite expirado ou revogado não permite claim.
+- [x] Teste: enumeração de token inviável e limitada; reenvio invalida o
       anterior; expiração respeitada.

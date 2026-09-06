@@ -150,14 +150,54 @@ model ProfessionalProfile {
   sourceNote         String?
   ownerUserId        String?                  @unique
   firstContactedAt   DateTime?
+  mergedIntoId       String? // preenchido quando state = MERGED (ticket 12)
   createdAt          DateTime                 @default(now())
 
   relationships WorkRelationship[]
   categories    ProfessionalProfileCategory[]
+  invites       Invite[]
 
-  // Dedupe por telefone é imposto na camada de aplicação enquanto o perfil não
-  // está CLAIMED; a unicidade por telefone verificado entra no ticket 12.
   @@index([phoneE164])
+}
+
+// --- Convite para assumir o perfil (ADR-0003, ticket 10) ---
+
+enum InviteState {
+  PENDING
+  ACCEPTED
+  EXPIRED
+  REVOKED
+}
+
+model Invite {
+  id                    String      @id @default(cuid())
+  professionalProfileId String
+  companyId             String
+  tokenHash             String      @unique
+  channel               String // "email" | "sms"
+  state                 InviteState @default(PENDING)
+  expiresAt             DateTime
+  acceptedAt            DateTime?
+  createdAt             DateTime    @default(now())
+
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@index([professionalProfileId])
+}
+
+// --- OTP de telefone para o claim (ADR-0003, ticket 11) ---
+
+model PhoneOtp {
+  id         String    @id @default(cuid())
+  phoneE164  String
+  codeHash   String
+  purpose    String // "claim"
+  expiresAt  DateTime
+  attempts   Int       @default(0)
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+
+  @@index([phoneE164, purpose])
 }
 
 // --- Categoria profissional (ADR-0007, ticket 26) ---

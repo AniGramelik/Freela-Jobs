@@ -5,14 +5,14 @@
 
 **Bloqueado por:** 11.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Chave de dedupe: telefone verificado em E.164.
-- [ ] Criar perfil gerenciado com telefone já existente adiciona só um
+- [x] Chave de dedupe: telefone verificado em E.164.
+- [x] Criar perfil gerenciado com telefone já existente adiciona só um
       `WorkRelationship` da nova empresa (`PENDING_CONSENT` se já `CLAIMED`).
-- [ ] No claim, perfis duplicados fazem merge transacional: `WorkRelationship`,
+- [x] No claim, perfis duplicados fazem merge transacional: `WorkRelationship`,
       `CallOutResponse`, `InternalRating` movem para o canônico; duplicado →
       `MERGED` e redireciona leituras.
-- [ ] `AuditLog` de cada merge; suporte inspeciona e reverte.
-- [ ] Teste: contagens antes/depois conferem; dois merges simultâneos não
+- [x] `AuditLog` de cada merge; suporte inspeciona e reverte.
+- [x] Teste: contagens antes/depois conferem; dois merges simultâneos não
       corrompem.
