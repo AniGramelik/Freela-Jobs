@@ -5,12 +5,19 @@ inicial ativado, e o profissional escolhe a sua.
 
 **Bloqueado por:** 08.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `ProfessionalCategory` com seed das categorias operacionais/eventuais do
+- [x] `ProfessionalCategory` com seed das categorias operacionais/eventuais do
       piloto; flag de ativa/inativa.
-- [ ] Profissional (perfil `CLAIMED`) e perfil gerenciado carregam uma ou mais
+- [x] Profissional (perfil `CLAIMED`) e perfil gerenciado carregam uma ou mais
       categorias.
-- [ ] Estrutura permite categoria futura exigir campos e verificação próprios,
+- [x] Estrutura permite categoria futura exigir campos e verificação próprios,
       sem migração de modelo (só dados).
-- [ ] Teste: categoria inativa não aparece para seleção nem para busca.
+- [x] Teste: categoria inativa não aparece para seleção nem para busca.
+
+## Resultado (lote A)
+
+`ProfessionalCategory` + `ProfessionalProfileCategory`. `seedPilotCategories`
+(7 categorias operacionais), `listActiveCategories`, `setProfessionalCategories`
+(substitui o conjunto). `registerManagedProfessional` aceita `categorySlugs`.
+`prisma/seed.ts` + `npm run db:seed`. Verde: 2 testes de integração.

@@ -23,6 +23,12 @@ export default async function PainelPage() {
           <li>
             <Link href="/painel/equipe">Equipe (acervo de profissionais)</Link>
           </li>
+          <li>
+            <Link href="/painel/empresa">Endereço da empresa</Link>
+          </li>
+          <li>
+            <Link href="/painel/vagas">Vagas (mural)</Link>
+          </li>
         </ul>
       </nav>
 

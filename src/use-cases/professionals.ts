@@ -7,6 +7,8 @@ import type {
 import { toE164 } from "@/domain/phone";
 import { err, ok, type Result } from "@/domain/index";
 
+import { setProfessionalCategories } from "./categories";
+
 export type RegisterManagedInput = {
   companyId: string;
   fullName: string;
@@ -15,6 +17,7 @@ export type RegisterManagedInput = {
   roles?: string[];
   sourceNote?: string | null;
   privateNote?: string | null;
+  categorySlugs?: string[];
 };
 
 export type RegisterManagedError =
@@ -92,6 +95,12 @@ export async function registerManagedProfessional(
         privateNote: input.privateNote ?? null,
       },
     });
+    if (input.categorySlugs && input.categorySlugs.length > 0) {
+      await setProfessionalCategories(tx, {
+        professionalProfileId: profile.id,
+        slugs: input.categorySlugs,
+      });
+    }
     return { profileId: profile.id, relationshipId: relationship.id };
   });
 
