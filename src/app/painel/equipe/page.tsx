@@ -6,13 +6,20 @@ import { listCompanyProfessionals } from "@/use-cases/professionals";
 
 export const dynamic = "force-dynamic";
 
+const CONVITE_MSG: Record<string, string> = {
+  enviado: "Convite enviado.",
+  no_email: "Cadastre um e-mail no perfil para convidar.",
+  already_claimed: "Esse profissional já assumiu o perfil.",
+  not_found: "Profissional não encontrado.",
+};
+
 export default async function EquipePage({
   searchParams,
 }: {
-  searchParams: Promise<{ q?: string }>;
+  searchParams: Promise<{ q?: string; convite?: string }>;
 }) {
   const { company } = await requireCompanyContext();
-  const { q } = await searchParams;
+  const { q, convite } = await searchParams;
 
   const people = await listCompanyProfessionals(prisma, {
     companyId: company.id,
@@ -22,6 +29,10 @@ export default async function EquipePage({
   return (
     <main>
       <h1>Equipe — {company.name}</h1>
+
+      {convite ? (
+        <p role="status">{CONVITE_MSG[convite] ?? "Convite processado."}</p>
+      ) : null}
 
       <form method="get">
         <label>
@@ -46,6 +57,7 @@ export default async function EquipePage({
               <th>Funções</th>
               <th>Estado</th>
               <th>Nota privada</th>
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -56,6 +68,22 @@ export default async function EquipePage({
                 <td>{p.roles.join(", ") || "—"}</td>
                 <td>{p.profileState}</td>
                 <td>{p.privateNote ?? "—"}</td>
+                <td>
+                  {p.profileState === "CLAIMED" ? (
+                    "assumido"
+                  ) : (
+                    <form action="/painel/equipe/convidar" method="post">
+                      <input
+                        type="hidden"
+                        name="professionalProfileId"
+                        value={p.profileId}
+                      />
+                      <button type="submit">
+                        {p.profileState === "INVITED" ? "Reenviar convite" : "Convidar"}
+                      </button>
+                    </form>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>
