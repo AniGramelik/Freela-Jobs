@@ -32,6 +32,52 @@ model Company {
 
   memberships   CompanyMembership[]
   relationships WorkRelationship[]
+  address       CompanyAddress?
+  plan          CompanyPlan?
+  jobPostings   JobPosting[]
+}
+
+// --- Endereço e geografia da empresa (ADR-0006, ticket 09) ---
+
+enum GeocodeStatus {
+  PENDING
+  OK
+  FAILED
+}
+
+model CompanyAddress {
+  id            String        @id @default(cuid())
+  companyId     String        @unique
+  line          String
+  district      String?
+  city          String
+  state         String // UF
+  zip           String?
+  latitude      Float?
+  longitude     Float?
+  geocodeStatus GeocodeStatus @default(PENDING)
+  geocodedAt    DateTime?
+  radiusKm      Int           @default(20)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+}
+
+// --- Plano da empresa (ADR-0008, ticket 27) ---
+
+enum CompanyPlanTier {
+  FREE
+  PAID
+}
+
+model CompanyPlan {
+  companyId      String          @id
+  tier           CompanyPlanTier @default(FREE)
+  activeJobLimit Int             @default(3) // N do plano FREE (D10)
+  updatedAt      DateTime        @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
 }
 
 model CompanyMembership {
@@ -107,10 +153,35 @@ model ProfessionalProfile {
   createdAt          DateTime                 @default(now())
 
   relationships WorkRelationship[]
+  categories    ProfessionalProfileCategory[]
 
   // Dedupe por telefone é imposto na camada de aplicação enquanto o perfil não
   // está CLAIMED; a unicidade por telefone verificado entra no ticket 12.
   @@index([phoneE164])
+}
+
+// --- Categoria profissional (ADR-0007, ticket 26) ---
+
+model ProfessionalCategory {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  name      String
+  active    Boolean  @default(true)
+  regulated Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  profiles ProfessionalProfileCategory[]
+}
+
+model ProfessionalProfileCategory {
+  professionalProfileId String
+  categoryId            String
+
+  professionalProfile ProfessionalProfile  @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+  category            ProfessionalCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@id([professionalProfileId, categoryId])
+  @@index([categoryId])
 }
 
 enum WorkRelationshipState {
@@ -228,4 +299,57 @@ model NotificationOptOut {
   createdAt DateTime @default(now())
 
   @@id([subjectId, category])
+}
+
+// --- Vaga pública (ADR-0007, ticket 28) ---
+
+enum JobVinculo {
+  DIARIA
+  TEMPORARIO
+  PJ
+  CLT
+  ESTAGIO
+}
+
+enum JobLocationMode {
+  PRESENCIAL
+  HIBRIDO
+  REMOTO
+}
+
+enum JobPostingStatus {
+  DRAFT
+  PUBLISHED
+  CLOSED
+  CANCELLED
+  FILLED
+}
+
+model JobPosting {
+  id                  String           @id @default(cuid())
+  companyId           String
+  title               String
+  description         String
+  categorySlug        String
+  vinculo             JobVinculo
+  locationMode        JobLocationMode
+  city                String?
+  state               String?
+  latitude            Float?
+  longitude           Float?
+  radiusKm            Int?
+  compensationText    String?
+  positions           Int              @default(1)
+  status              JobPostingStatus @default(DRAFT)
+  applicationDeadline DateTime
+  publishedAt         DateTime?
+  featuredUntil       DateTime?
+  createdAt           DateTime         @default(now())
+  updatedAt           DateTime         @updatedAt
+
+  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@index([status, applicationDeadline])
+  @@index([companyId, status])
+  @@index([categorySlug])
 }

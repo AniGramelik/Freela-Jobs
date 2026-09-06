@@ -5,18 +5,25 @@ para consulta por raio; no lançamento, só endereços de Colatina/ES entram.
 
 **Bloqueado por:** 06.
 
-**Status:** ready-for-agent
+**Status:** done
 
 Decisão pendente (D4): provedor de geocodificação. Construir atrás de uma
 interface com stub; trocar pelo real é follow-up.
 
-- [ ] `Address` (linha, bairro, cidade, estado, CEP, latitude, longitude,
+- [x] `Address` (linha, bairro, cidade, estado, CEP, latitude, longitude,
       `geocodedAt`) + raio default 20 km, editável.
-- [ ] Geocodificação no cadastro, resultado persistido, cache por endereço
+- [x] Geocodificação no cadastro, resultado persistido, cache por endereço
       normalizado; nunca geocodificar em consulta.
-- [ ] Falha do provedor não perde o cadastro (`PENDING_GEOCODE`, worker
+- [x] Falha do provedor não perde o cadastro (`PENDING_GEOCODE`, worker
       re-tenta).
-- [ ] Gate do piloto (config de lançamento, não regra de schema): com o gate
+- [x] Gate do piloto (config de lançamento, não regra de schema): com o gate
       ligado, só Colatina/ES é aceita; com o gate desligado, qualquer cidade.
-- [ ] Teste: gate ligado recusa fora de Colatina com mensagem clara; gate
+- [x] Teste: gate ligado recusa fora de Colatina com mensagem clara; gate
       desligado aceita.
+
+## Resultado (lote A)
+
+`CompanyAddress` + `setCompanyAddress`/`getCompanyAddress`. `src/domain/geo.ts`
+(haversine, raio) e `src/domain/pilot.ts` (`isWithinPilot`, gate por `PILOT_GATE`).
+Geocodificação atrás de `Geocoder` (`StubGeocoder` resolve Colatina; D4 troca o real).
+Página `/painel/empresa`. Verde: typecheck/lint/build + 4 testes de integração + 5 unitários.
