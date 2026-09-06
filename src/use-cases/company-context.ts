@@ -50,16 +50,23 @@ export type SessionContext = {
   user: { id: string; email: string };
   companies: CompanyOption[];
   activeCompany: CompanyOption | null;
+  professionalProfileId: string | null;
 };
 
 export async function loadSessionContext(
   db: PrismaClient,
   params: { userId: string; storedActiveCompanyId: string | null },
 ): Promise<SessionContext | null> {
-  const user = await db.user.findUnique({
-    where: { id: params.userId },
-    include: { memberships: { include: { company: true } } },
-  });
+  const [user, profile] = await Promise.all([
+    db.user.findUnique({
+      where: { id: params.userId },
+      include: { memberships: { include: { company: true } } },
+    }),
+    db.professionalProfile.findFirst({
+      where: { ownerUserId: params.userId, state: "CLAIMED" },
+      select: { id: true },
+    }),
+  ]);
   if (!user) return null;
 
   const companies: CompanyOption[] = user.memberships
@@ -70,5 +77,6 @@ export async function loadSessionContext(
     user: { id: user.id, email: user.email },
     companies,
     activeCompany: resolveActiveCompany(companies, params.storedActiveCompanyId),
+    professionalProfileId: profile?.id ?? null,
   };
 }

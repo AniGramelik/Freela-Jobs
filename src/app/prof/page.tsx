@@ -8,9 +8,16 @@ export default async function ProfPage() {
     <main>
       <h1>Seu perfil</h1>
       <p>Olá, {user.email}. Perfil assumido com sucesso.</p>
-      <p>
-        Disponibilidade e vínculos entram nas próximas telas (tickets 13 e 14).
-      </p>
+      <nav>
+        <ul>
+          <li>
+            <a href="/prof/disponibilidade">Minha disponibilidade</a>
+          </li>
+          <li>
+            <a href="/prof/vinculos">Meus vínculos</a>
+          </li>
+        </ul>
+      </nav>
       <form action="/sair" method="post">
         <button type="submit">Sair</button>
       </form>

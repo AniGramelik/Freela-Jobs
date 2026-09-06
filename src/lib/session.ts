@@ -33,6 +33,7 @@ export type SessionUser = {
   sessionId: string;
   companies: CompanyOption[];
   activeCompany: CompanyOption | null;
+  professionalProfileId: string | null;
 };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
@@ -54,6 +55,7 @@ export async function getSessionUser(): Promise<SessionUser | null> {
     sessionId: resolved.sessionId,
     companies: context.companies,
     activeCompany: context.activeCompany,
+    professionalProfileId: context.professionalProfileId,
   };
 }
 
@@ -73,4 +75,14 @@ export async function requireCompanyContext(): Promise<CompanyContext> {
   const user = await requireSession();
   if (!user.activeCompany) redirect("/entrar");
   return { user, company: user.activeCompany };
+}
+
+/** Sessão + perfil de profissional assumido. Base das telas do profissional. */
+export async function requireProfessional(): Promise<{
+  user: SessionUser;
+  professionalProfileId: string;
+}> {
+  const user = await requireSession();
+  if (!user.professionalProfileId) redirect("/entrar");
+  return { user, professionalProfileId: user.professionalProfileId };
 }
