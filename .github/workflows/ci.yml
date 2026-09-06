@@ -40,6 +40,9 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://freela:freela@localhost:5432/freela_jobs_test?schema=public
+      # Faz o global-setup dos testes de integração usar o service container
+      # em vez de baixar/subir o embedded-postgres.
+      TEST_DATABASE_URL: postgresql://freela:freela@localhost:5432/freela_jobs_test?schema=public
 
     steps:
       - uses: actions/checkout@v4
