@@ -19,6 +19,7 @@ model User {
   email           String    @unique // sempre normalizado (minúsculo, trim)
   passwordHash    String?
   emailVerifiedAt DateTime?
+  blockedAt       DateTime? // moderação (ticket 25)
   createdAt       DateTime  @default(now())
 
   memberships CompanyMembership[]
@@ -158,6 +159,7 @@ model ProfessionalProfile {
   latitude           Float?
   longitude          Float?
   createdAt          DateTime                 @default(now())
+  publicListing      PublicListing?
 
   relationships       WorkRelationship[]
   categories          ProfessionalProfileCategory[]
@@ -550,4 +552,42 @@ model DataSubjectRequest {
 
   @@index([userId])
   @@index([state])
+}
+
+// --- Rede local por opt-in (ADR-0007, tickets 22, 24) ---
+
+model PublicListing {
+  professionalProfileId String   @id
+  active                Boolean  @default(true)
+  roles                 String[]
+  radiusKm              Int      @default(30)
+  showPhone             Boolean  @default(false)
+  showReputation        Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@index([active])
+}
+
+// --- Moderação (ticket 25) ---
+
+enum ReportState {
+  OPEN
+  ACTIONED
+  DISMISSED
+}
+
+model Report {
+  id             String      @id @default(cuid())
+  reporterUserId String?
+  targetType     String // "professional_profile" | "job_posting" | "user"
+  targetId       String
+  reason         String
+  state          ReportState @default(OPEN)
+  createdAt      DateTime    @default(now())
+
+  @@index([state])
+  @@index([targetType, targetId])
 }

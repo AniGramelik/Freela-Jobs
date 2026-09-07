@@ -32,6 +32,9 @@ export default async function PainelPage() {
           <li>
             <Link href="/painel/convocacoes">Convocações</Link>
           </li>
+          <li>
+            <Link href="/painel/rede">Buscar na rede local</Link>
+          </li>
         </ul>
       </nav>
 

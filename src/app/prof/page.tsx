@@ -25,6 +25,9 @@ export default async function ProfPage() {
           <li>
             <a href="/prof/meus-dados">Meus dados (LGPD)</a>
           </li>
+          <li>
+            <a href="/prof/rede">Rede local (visibilidade)</a>
+          </li>
         </ul>
       </nav>
       <form action="/sair" method="post">
