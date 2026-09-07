@@ -22,6 +22,9 @@ export default async function ProfPage() {
           <li>
             <a href="/prof/historico">Meu histórico</a>
           </li>
+          <li>
+            <a href="/prof/meus-dados">Meus dados (LGPD)</a>
+          </li>
         </ul>
       </nav>
       <form action="/sair" method="post">
