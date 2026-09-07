@@ -73,6 +73,24 @@ F0 fundação · F1a base privada · F1b convocações · F1c endurecimento LGPD
 F2 rede local por opt-in · **F3 mural de vagas nacional** (Vaga/Candidatura,
 `CompanyPlan`, destaque, moderação de vaga).
 
+## Estado — 2026-09-07
+
+**35/35 tickets concluídos e mesclados em `main`.** 149 testes (unit +
+integração sobre Postgres real). 11 migrações. `lint` / `typecheck` / `build`
+verdes.
+
+Pendências que NÃO são código (bloqueiam go-live com usuários reais):
+- **D1/D2** — bases legais LGPD e prazos de retenção + encarregado (DPO):
+  revisão jurídica. O mecanismo está pronto (`Consent`, `runRetention`,
+  `anonymizeProfile`, tela "meus dados"), mas os tickets 18–20 e 35 estão
+  "done (mecanismo)", não liberáveis sem a confirmação.
+- **D4** — provedores reais de e-mail / push / SMS-OTP (hoje: `LogProvider` /
+  `LogOtpSender` / `StubGeocoder`).
+- **D3 (resolvido: Colatina/ES)** · **D10** preços do plano/destaque ·
+  **D11** infra de busca dedicada (só se o volume nacional exigir).
+- Passos de infra: `CRON_SECRET` na Vercel, backups do provedor, ruleset de
+  branch, drill de restore, teste de carga do fluxo de convocação.
+
 ## Issues
 
 35 fatias verticais publicadas em `issues/01`–`35`, em ordem de dependência
