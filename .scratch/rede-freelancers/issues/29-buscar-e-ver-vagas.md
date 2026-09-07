@@ -5,13 +5,13 @@ de uma.
 
 **Bloqueado por:** 28.
 
-**Status:** ready-for-agent
+**Status:** done
 
 Decisão pendente (D11): infra dedicada de busca só se o volume nacional exigir.
 Construir com `earthdistance` + filtros SQL.
 
-- [ ] Filtros: categoria, `tipoDeVinculo`, `modoDeLocal`, UF/cidade e raio (só
+- [x] Filtros: categoria, `tipoDeVinculo`, `modoDeLocal`, UF/cidade e raio (só
       `PRESENCIAL`).
-- [ ] Lista paginada, sem N+1; consulta por raio usa índice.
-- [ ] Detalhe da vaga com todos os campos públicos e endereço aproximado.
-- [ ] Teste: cada filtro isola o resultado esperado; `REMOTO` ignora raio.
+- [x] Lista paginada, sem N+1; consulta por raio usa índice.
+- [x] Detalhe da vaga com todos os campos públicos e endereço aproximado.
+- [x] Teste: cada filtro isola o resultado esperado; `REMOTO` ignora raio.

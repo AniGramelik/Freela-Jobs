@@ -5,13 +5,13 @@ posição na busca; a cobrança é registrada manualmente no início.
 
 **Bloqueado por:** 28.
 
-**Status:** ready-for-agent
+**Status:** done
 
 Decisão pendente (D10): preço e duração do destaque.
 
-- [ ] `FeaturedListing` (vaga, período `featuredUntil`, origem do pagamento).
+- [x] `FeaturedListing` (vaga, período `featuredUntil`, origem do pagamento).
       Liberação manual pelo suporte.
-- [ ] Vaga destacada ranqueia acima do teto do plano e em posição de maior
+- [x] Vaga destacada ranqueia acima do teto do plano e em posição de maior
       visibilidade na busca (29).
-- [ ] Fim do período remove o destaque automaticamente.
-- [ ] Teste: destaque expira sozinho; sem destaque, ordenação normal.
+- [x] Fim do período remove o destaque automaticamente.
+- [x] Teste: destaque expira sozinho; sem destaque, ordenação normal.

@@ -6,14 +6,14 @@ consentimento.
 
 **Bloqueado por:** 31, 08, 14.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `SHORTLISTED → OFFERED`; profissional aceita (`ACCEPTED`) ou recusa
+- [x] `SHORTLISTED → OFFERED`; profissional aceita (`ACCEPTED`) ou recusa
       (`WITHDRAWN`).
-- [ ] Soma de `ACCEPTED` por vaga ≤ `positions`; ao atingir, `JobPosting →
+- [x] Soma de `ACCEPTED` por vaga ≤ `positions`; ao atingir, `JobPosting →
       FILLED` e para de receber candidatura.
-- [ ] `Application` `ACCEPTED` cria `WorkRelationship` `PENDING_CONSENT` entre a
+- [x] `Application` `ACCEPTED` cria `WorkRelationship` `PENDING_CONSENT` entre a
       empresa e o profissional.
-- [ ] Profissional confirma ou recusa o vínculo pela tela "meus vínculos" (14).
-- [ ] Teste: aceitação concorrente além de `positions` é bloqueada; vaga vai a
+- [x] Profissional confirma ou recusa o vínculo pela tela "meus vínculos" (14).
+- [x] Teste: aceitação concorrente além de `positions` é bloqueada; vaga vai a
       `FILLED` no momento certo.

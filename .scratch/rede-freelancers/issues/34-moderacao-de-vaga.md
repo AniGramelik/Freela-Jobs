@@ -5,11 +5,11 @@ notificada.
 
 **Bloqueado por:** 28.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Denúncia de vaga com motivo (por qualquer usuário).
-- [ ] Suporte remove a vaga (`JobPosting → CANCELLED` por moderação) e notifica a
+- [x] Denúncia de vaga com motivo (por qualquer usuário).
+- [x] Suporte remove a vaga (`JobPosting → CANCELLED` por moderação) e notifica a
       empresa com a razão.
-- [ ] Candidaturas em aberto são encerradas e os candidatos avisados.
-- [ ] Ação gera `AuditLog`.
-- [ ] Teste: vaga removida some da busca; candidaturas não ficam penduradas.
+- [x] Candidaturas em aberto são encerradas e os candidatos avisados.
+- [x] Ação gera `AuditLog`.
+- [x] Teste: vaga removida some da busca; candidaturas não ficam penduradas.

@@ -113,6 +113,13 @@ export async function anonymizeProfile(
     db.availabilityWindow.deleteMany({
       where: { professionalProfileId: profile.id },
     }),
+    db.publicListing.deleteMany({
+      where: { professionalProfileId: profile.id },
+    }),
+    db.application.updateMany({
+      where: { professionalProfileId: profile.id },
+      data: { resumeUrl: null, coverMessage: null },
+    }),
   ]);
   return ok({ professionalProfileId: profile.id });
 }

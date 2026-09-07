@@ -167,6 +167,7 @@ model ProfessionalProfile {
   availabilityWindows AvailabilityWindow[]
   callOutResponses    CallOutResponse[]
   internalRatings     InternalRating[]
+  applications        Application[]
 
   @@index([phoneE164])
 }
@@ -418,11 +419,42 @@ model JobPosting {
   createdAt           DateTime         @default(now())
   updatedAt           DateTime         @updatedAt
 
-  company Company @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  company      Company       @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  applications Application[]
 
   @@index([status, applicationDeadline])
   @@index([companyId, status])
   @@index([categorySlug])
+}
+
+// --- Candidatura (ADR-0007, tickets 30, 31, 32, 35) ---
+
+enum ApplicationState {
+  SUBMITTED
+  UNDER_REVIEW
+  SHORTLISTED
+  OFFERED
+  ACCEPTED
+  REJECTED
+  WITHDRAWN
+}
+
+model Application {
+  id                    String           @id @default(cuid())
+  jobPostingId          String
+  professionalProfileId String
+  coverMessage          String?
+  resumeUrl             String?
+  state                 ApplicationState @default(SUBMITTED)
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @updatedAt
+
+  jobPosting          JobPosting          @relation(fields: [jobPostingId], references: [id], onDelete: Cascade)
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([jobPostingId, professionalProfileId])
+  @@index([professionalProfileId])
+  @@index([jobPostingId, state])
 }
 
 // --- Convocação (ADR-0003, tickets 15, 16) ---

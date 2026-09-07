@@ -5,15 +5,15 @@ anexos, e acompanha o estado da candidatura.
 
 **Bloqueado por:** 29, 11.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `Application` (`jobPostingId`, `professionalProfileId`, `coverMessage?`,
+- [x] `Application` (`jobPostingId`, `professionalProfileId`, `coverMessage?`,
       `attachments[]`). Estado inicial `SUBMITTED`.
-- [ ] Candidatar-se exige `ProfessionalProfile` em `CLAIMED`.
-- [ ] Uma `Application` por (vaga, profissional).
-- [ ] Não aceita candidatura se a vaga está `FILLED`/`CLOSED`/`CANCELLED` ou fora
+- [x] Candidatar-se exige `ProfessionalProfile` em `CLAIMED`.
+- [x] Uma `Application` por (vaga, profissional).
+- [x] Não aceita candidatura se a vaga está `FILLED`/`CLOSED`/`CANCELLED` ou fora
       do prazo.
-- [ ] Notifica a empresa (`application_received`); profissional vê a lista das
+- [x] Notifica a empresa (`application_received`); profissional vê a lista das
       suas candidaturas e o estado de cada.
-- [ ] Teste: perfil gerenciado não se candidata; candidatura duplicada é
+- [x] Teste: perfil gerenciado não se candidata; candidatura duplicada é
       recusada.
