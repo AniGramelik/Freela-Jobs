@@ -5,12 +5,12 @@ internamente e consulta o histórico de cada profissional.
 
 **Bloqueado por:** 15.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Marcar cada `CallOutResponse` como `COMPLETED` ou `NO_SHOW`.
-- [ ] `InternalRating` (nota + comentário) exige `WorkRelationship`; privada da
+- [x] Marcar cada `CallOutResponse` como `COMPLETED` ou `NO_SHOW`.
+- [x] `InternalRating` (nota + comentário) exige `WorkRelationship`; privada da
       empresa autora, invisível ao profissional e a outras empresas.
-- [ ] Histórico por profissional na empresa (convocações, presenças, faltas,
+- [x] Histórico por profissional na empresa (convocações, presenças, faltas,
       avaliações) e histórico do próprio profissional por empresa.
-- [ ] Teste: nota privada não vaza em nenhuma API do profissional nem de outra
+- [x] Teste: nota privada não vaza em nenhuma API do profissional nem de outra
       empresa.

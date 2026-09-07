@@ -5,12 +5,12 @@ elegíveis da base são notificados e aceitam até preencher as vagas.
 
 **Bloqueado por:** 09, 15, 13.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `CallOut` modo `OPEN`: elegível = função compatível + dentro do raio
+- [x] `CallOut` modo `OPEN`: elegível = função compatível + dentro do raio
       (ADR-0006) + `WorkRelationship` ativo.
-- [ ] Disponibilidade declarada é filtro, não trava: profissional fora da janela
+- [x] Disponibilidade declarada é filtro, não trava: profissional fora da janela
       ainda pode responder.
-- [ ] Notificação a todos os elegíveis via outbox; empresa vê a taxa de alcance.
-- [ ] Vagas param de aceitar ao lotar; `CallOut → FILLED`.
-- [ ] Teste: elegibilidade por raio usa índice; sem N+1 na lista.
+- [x] Notificação a todos os elegíveis via outbox; empresa vê a taxa de alcance.
+- [x] Vagas param de aceitar ao lotar; `CallOut → FILLED`.
+- [x] Teste: elegibilidade por raio usa índice; sem N+1 na lista.
