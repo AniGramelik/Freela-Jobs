@@ -59,3 +59,15 @@ animar.
 FINISH: unreviewed and undocumented is unfinished; this build ends with the
 finish review, the verdict, DESIGN.md, and every shipping raster carrying its
 provenance.
+
+---
+
+## Emenda — 2026-09-07 (rebrand do cliente)
+
+O cliente enviou a logomarca oficial (navy + teal, gradiente navy→teal) e pediou
+identidade **expressiva editorial**, não a "ferramenta feita reta". O mundo
+visual foi re-moldado sobre a mesma arquitetura de tokens: acento = teal do
+logo; `--color-ink` (navy) como neutro editorial; gradiente da marca como gesto;
+serifa de display **Fraunces** nas vozes altas (≥1.25rem); Geist Sans no denso;
+tema escuro passa a ser navy; grão sutil em capas; `fj-rise` na entrada de rota.
+A tese "a lista é o produto" e o padrão de tabela seguem intocados.
