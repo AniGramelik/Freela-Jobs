@@ -74,6 +74,37 @@ export async function mergeDuplicateProfiles(
         data: { professionalProfileId: canonical.id },
       });
 
+      // Respostas a convocação: mover as que não colidem; descartar duplicatas.
+      const dupResponses = await tx.callOutResponse.findMany({
+        where: { professionalProfileId: dup.id },
+      });
+      for (const resp of dupResponses) {
+        const clash = await tx.callOutResponse.findUnique({
+          where: {
+            callOutId_professionalProfileId: {
+              callOutId: resp.callOutId,
+              professionalProfileId: canonical.id,
+            },
+          },
+        });
+        if (clash) {
+          await tx.callOutResponse.delete({ where: { id: resp.id } });
+        } else {
+          await tx.callOutResponse.update({
+            where: { id: resp.id },
+            data: { professionalProfileId: canonical.id },
+          });
+        }
+      }
+
+      await tx.internalRating.updateMany({
+        where: { professionalProfileId: dup.id },
+        data: { professionalProfileId: canonical.id },
+      });
+      await tx.availabilityWindow.deleteMany({
+        where: { professionalProfileId: dup.id },
+      });
+
       await tx.professionalProfile.update({
         where: { id: dup.id },
         data: { state: "MERGED", mergedIntoId: canonical.id },

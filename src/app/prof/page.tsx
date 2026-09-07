@@ -16,6 +16,12 @@ export default async function ProfPage() {
           <li>
             <a href="/prof/vinculos">Meus vínculos</a>
           </li>
+          <li>
+            <a href="/prof/convocacoes">Convocações</a>
+          </li>
+          <li>
+            <a href="/prof/historico">Meu histórico</a>
+          </li>
         </ul>
       </nav>
       <form action="/sair" method="post">

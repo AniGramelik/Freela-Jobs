@@ -35,6 +35,7 @@ model Company {
   address       CompanyAddress?
   plan          CompanyPlan?
   jobPostings   JobPosting[]
+  callOuts      CallOut[]
 }
 
 // --- Endereço e geografia da empresa (ADR-0006, ticket 09) ---
@@ -152,12 +153,18 @@ model ProfessionalProfile {
   firstContactedAt   DateTime?
   mergedIntoId       String? // preenchido quando state = MERGED (ticket 12)
   availableNowUntil  DateTime? // "disponível agora" com expiração (ticket 13)
+  baseCity           String? // localização-base declarada (ticket 16)
+  baseState          String?
+  latitude           Float?
+  longitude          Float?
   createdAt          DateTime                 @default(now())
 
   relationships       WorkRelationship[]
   categories          ProfessionalProfileCategory[]
   invites             Invite[]
   availabilityWindows AvailabilityWindow[]
+  callOutResponses    CallOutResponse[]
+  internalRatings     InternalRating[]
 
   @@index([phoneE164])
 }
@@ -414,4 +421,84 @@ model JobPosting {
   @@index([status, applicationDeadline])
   @@index([companyId, status])
   @@index([categorySlug])
+}
+
+// --- Convocação (ADR-0003, tickets 15, 16) ---
+
+enum CallOutMode {
+  TARGETED
+  OPEN
+}
+
+enum CallOutStatus {
+  DRAFT
+  OPEN
+  FILLED
+  CLOSED
+  CANCELLED
+}
+
+enum CallOutResponseState {
+  OFFERED
+  ACCEPTED
+  DECLINED
+  WITHDRAWN
+  NO_SHOW
+  COMPLETED
+}
+
+model CallOut {
+  id               String        @id @default(cuid())
+  companyId        String
+  mode             CallOutMode
+  role             String
+  shiftDate        DateTime
+  shiftStart       String
+  shiftEnd         String?
+  location         String
+  compensationText String?
+  notes            String?
+  quantity         Int           @default(1)
+  radiusKm         Int?
+  status           CallOutStatus @default(DRAFT)
+  publishedAt      DateTime?
+  createdAt        DateTime      @default(now())
+
+  company   Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  responses CallOutResponse[]
+
+  @@index([companyId, status])
+  @@index([status, shiftDate])
+}
+
+model CallOutResponse {
+  id                    String               @id @default(cuid())
+  callOutId             String
+  professionalProfileId String
+  state                 CallOutResponseState @default(OFFERED)
+  respondedAt           DateTime?
+  createdAt             DateTime             @default(now())
+
+  callOut             CallOut             @relation(fields: [callOutId], references: [id], onDelete: Cascade)
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@unique([callOutId, professionalProfileId])
+  @@index([professionalProfileId])
+}
+
+// --- Avaliação interna (ADR-0003, ticket 17) ---
+
+model InternalRating {
+  id                    String   @id @default(cuid())
+  companyId             String
+  professionalProfileId String
+  callOutId             String?
+  score                 Int
+  comment               String?
+  createdAt             DateTime @default(now())
+
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+
+  @@index([companyId, professionalProfileId])
+  @@index([professionalProfileId])
 }

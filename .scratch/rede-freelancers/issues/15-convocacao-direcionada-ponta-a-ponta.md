@@ -5,17 +5,17 @@ convocação, elas recebem e aceitam em poucos toques, e a empresa vê quem topo
 
 **Bloqueado por:** 08, 05.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `CallOut` modo `TARGETED`; `CallOutSlot { role, quantity }`; turno, local,
+- [x] `CallOut` modo `TARGETED`; `CallOutSlot { role, quantity }`; turno, local,
       remuneração (texto livre), observações.
-- [ ] Estados `DRAFT → OPEN → FILLED → CLOSED | CANCELLED`; só vai a `OPEN` com
+- [x] Estados `DRAFT → OPEN → FILLED → CLOSED | CANCELLED`; só vai a `OPEN` com
       ≥1 slot e turno no futuro.
-- [ ] `CallOutResponse` `OFFERED → ACCEPTED → COMPLETED`; ramos `DECLINED`,
+- [x] `CallOutResponse` `OFFERED → ACCEPTED → COMPLETED`; ramos `DECLINED`,
       `WITHDRAWN`, `NO_SHOW`.
-- [ ] Notificação por push + e-mail (outbox); profissional vê detalhe completo e
+- [x] Notificação por push + e-mail (outbox); profissional vê detalhe completo e
       aceita/recusa em ≤ 2 toques.
-- [ ] Soma de `ACCEPTED` por slot ≤ `quantity` (constraint + checagem
+- [x] Soma de `ACCEPTED` por slot ≤ `quantity` (constraint + checagem
       transacional); empresa vê em tempo real quem aceitou/recusou/não respondeu.
-- [ ] Profissional desiste antes do turno; empresa cancela e avisa quem aceitou.
-- [ ] Teste E2E do caminho feliz; teste de concorrência no último lugar da vaga.
+- [x] Profissional desiste antes do turno; empresa cancela e avisa quem aceitou.
+- [x] Teste E2E do caminho feliz; teste de concorrência no último lugar da vaga.

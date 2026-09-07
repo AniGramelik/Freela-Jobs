@@ -29,6 +29,9 @@ export default async function PainelPage() {
           <li>
             <Link href="/painel/vagas">Vagas (mural)</Link>
           </li>
+          <li>
+            <Link href="/painel/convocacoes">Convocações</Link>
+          </li>
         </ul>
       </nav>
 
