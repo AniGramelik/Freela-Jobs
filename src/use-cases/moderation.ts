@@ -53,6 +53,38 @@ export async function blockUser(
   return ok({ userId: params.userId });
 }
 
+export async function removeJob(
+  db: PrismaClient,
+  audit: AuditRecorder,
+  params: { supportUserId: string; jobId: string; reason: string },
+): Promise<Result<{ jobId: string }, "not_found">> {
+  const job = await db.jobPosting.findUnique({ where: { id: params.jobId } });
+  if (!job) return err("not_found");
+
+  await db.$transaction([
+    db.jobPosting.update({
+      where: { id: job.id },
+      data: { status: "CANCELLED" },
+    }),
+    db.application.updateMany({
+      where: {
+        jobPostingId: job.id,
+        state: { in: ["SUBMITTED", "UNDER_REVIEW", "SHORTLISTED", "OFFERED"] },
+      },
+      data: { state: "REJECTED" },
+    }),
+  ]);
+  await audit.record({
+    actorUserId: params.supportUserId,
+    actingAs: "support",
+    action: "job_posting.removed",
+    targetType: "JobPosting",
+    targetId: job.id,
+    after: { reason: params.reason },
+  });
+  return ok({ jobId: job.id });
+}
+
 export async function removeFromPublicNetwork(
   db: PrismaClient,
   audit: AuditRecorder,

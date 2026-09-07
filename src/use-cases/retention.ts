@@ -1,4 +1,4 @@
-import type { PrismaClient } from "@prisma/client";
+import { Prisma, type PrismaClient } from "@prisma/client";
 
 import { anonymizeProfile } from "./data-subject";
 
@@ -11,6 +11,7 @@ export const RETENTION = {
   managedProfileIdleDays: 180,
   phoneOtpDays: 7,
   authTokenDays: 30,
+  applicationAttachmentDays: 365, // ⚠️ D1 — anexos após a vaga encerrada
 };
 
 export type RetentionReport = {
@@ -19,6 +20,7 @@ export type RetentionReport = {
   profilesAnonymized: number;
   phoneOtpsDeleted: number;
   authTokensDeleted: number;
+  applicationAttachmentsCleared: number;
 };
 
 export async function runRetention(
@@ -79,11 +81,28 @@ export async function runRetention(
     await db.emailVerificationToken.deleteMany({ where: evWhere });
   }
 
+  // 4. Anexos de candidatura em vagas encerradas há muito tempo.
+  const attachmentWhere: Prisma.ApplicationWhereInput = {
+    OR: [{ resumeUrl: { not: null } }, { coverMessage: { not: null } }],
+    jobPosting: {
+      status: { in: ["CLOSED", "CANCELLED", "FILLED"] },
+      updatedAt: { lt: cutoff(RETENTION.applicationAttachmentDays) },
+    },
+  };
+  const attachments = await db.application.count({ where: attachmentWhere });
+  if (!dryRun) {
+    await db.application.updateMany({
+      where: attachmentWhere,
+      data: { resumeUrl: null, coverMessage: null },
+    });
+  }
+
   return {
     dryRun,
     invitesExpired: staleInvites.length,
     profilesAnonymized: idleProfiles.length,
     phoneOtpsDeleted: phoneOtps,
     authTokensDeleted: authTokens,
+    applicationAttachmentsCleared: attachments,
   };
 }

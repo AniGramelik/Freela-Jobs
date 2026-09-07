@@ -50,7 +50,7 @@ export default async function VagasPage() {
                 </td>
                 <td>{j.positions}</td>
                 <td>{j.status}</td>
-                <td>{j.applicationDeadline.toLocaleDateString("pt-BR")}</td>
+                <td><Link href={`/painel/vagas/${j.id}`}>{j.applicationDeadline.toLocaleDateString("pt-BR")} · abrir</Link></td>
               </tr>
             ))}
           </tbody>

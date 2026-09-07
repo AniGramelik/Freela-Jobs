@@ -124,3 +124,21 @@ export function listCompanyJobs(
     orderBy: { createdAt: "desc" },
   });
 }
+
+/** Destaque pago (ticket 33). Cobrança manual no início; aqui só o período. */
+export async function featureJob(
+  db: PrismaClient,
+  params: { companyId: string; jobId: string; days: number; now?: Date },
+): Promise<Result<{ featuredUntil: Date }, "not_found" | "invalid">> {
+  if (!Number.isInteger(params.days) || params.days < 1) return err("invalid");
+  const now = params.now ?? new Date();
+  const job = await db.jobPosting.findUnique({ where: { id: params.jobId } });
+  if (!job || job.companyId !== params.companyId) return err("not_found");
+
+  const featuredUntil = new Date(now.getTime() + params.days * 86_400_000);
+  await db.jobPosting.update({
+    where: { id: job.id },
+    data: { featuredUntil },
+  });
+  return ok({ featuredUntil });
+}
