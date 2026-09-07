@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { NavRail } from "@/components/app/nav-rail";
 import { prisma } from "@/lib/prisma";
 import { requireSession } from "@/lib/session";
+import { countUnreadConversations } from "@/use-cases/chat";
 import { loadSessionContext } from "@/use-cases/company-context";
 
 import { CompanySwitcher } from "./CompanySwitcher";
@@ -21,10 +22,18 @@ export default async function PainelLayout({
     storedActiveCompanyId: user.activeCompany?.id ?? null,
   });
 
+  const unreadMessages = ctx?.activeCompany
+    ? await countUnreadConversations(prisma, {
+        side: "COMPANY",
+        companyId: ctx.activeCompany.id,
+      })
+    : 0;
+
   return (
     <div className="min-h-dvh">
       <NavRail
         email={user.email}
+        unreadMessages={unreadMessages}
         header={
           <CompanySwitcher
             companies={ctx?.companies ?? []}

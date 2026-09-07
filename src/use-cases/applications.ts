@@ -106,7 +106,10 @@ export function listMyApplications(
     where: { professionalProfileId: params.professionalProfileId },
     include: {
       jobPosting: {
-        select: { title: true, company: { select: { name: true } } },
+        select: {
+          title: true,
+          company: { select: { id: true, name: true } },
+        },
       },
     },
     orderBy: { createdAt: "desc" },

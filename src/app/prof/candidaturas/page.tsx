@@ -1,4 +1,5 @@
 import { revalidatePath } from "next/cache";
+import { MessageSquare } from "lucide-react";
 
 import { buttonClass } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/layout";
@@ -10,6 +11,8 @@ import {
   respondToOffer,
   withdrawApplication,
 } from "@/use-cases/applications";
+
+import { startProfConversationAction } from "../mensagens/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -85,6 +88,26 @@ export default async function CandidaturasPage() {
                   </div>
                   <StatusPill tone={pill.tone}>{pill.label}</StatusPill>
                 </div>
+
+                <form action={startProfConversationAction} className="mt-3">
+                  <input
+                    type="hidden"
+                    name="companyId"
+                    value={a.jobPosting.company.id}
+                  />
+                  <input
+                    type="hidden"
+                    name="jobPostingId"
+                    value={a.jobPostingId}
+                  />
+                  <button
+                    type="submit"
+                    className={buttonClass("secondary", "sm")}
+                  >
+                    <MessageSquare size={14} strokeWidth={1.75} aria-hidden />
+                    Conversar com a empresa
+                  </button>
+                </form>
 
                 {a.state === "OFFERED" ? (
                   <div className="mt-3 grid grid-cols-2 gap-2">

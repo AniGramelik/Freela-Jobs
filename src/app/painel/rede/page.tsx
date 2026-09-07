@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-import { Search, Star } from "lucide-react";
+import { MessageSquare, Search, Star } from "lucide-react";
 
 import { Button, buttonClass } from "@/components/ui/button";
 import { Input } from "@/components/ui/field";
@@ -11,6 +11,8 @@ import {
   invitePublicProfessional,
   searchPublicNetwork,
 } from "@/use-cases/public-search";
+
+import { startCompanyConversationAction } from "../mensagens/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -142,6 +144,20 @@ export default async function PainelRedePage({
                   <Button type="submit" size="sm">
                     Convidar
                   </Button>
+                </form>
+                <form action={startCompanyConversationAction}>
+                  <input
+                    type="hidden"
+                    name="professionalProfileId"
+                    value={r.professionalProfileId}
+                  />
+                  <button
+                    type="submit"
+                    className={buttonClass("secondary", "sm")}
+                  >
+                    <MessageSquare size={14} strokeWidth={1.75} aria-hidden />
+                    Conversar
+                  </button>
                 </form>
                 <form action={report} className="flex items-center gap-2">
                   <input

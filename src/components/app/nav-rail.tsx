@@ -8,6 +8,7 @@ import {
   CalendarClock,
   LayoutGrid,
   LogOut,
+  MessageSquare,
   Radio,
   Users,
 } from "lucide-react";
@@ -23,12 +24,14 @@ const ICONS: Record<string, LucideIcon> = {
   building: Building2,
   radio: Radio,
   calendar: CalendarClock,
+  message: MessageSquare,
 };
 
 const ITEMS: NavItem[] = [
   { href: "/painel", label: "Painel", icon: "grid" },
   { href: "/painel/convocacoes", label: "Convocações", icon: "radio" },
   { href: "/painel/vagas", label: "Vagas", icon: "calendar" },
+  { href: "/painel/mensagens", label: "Mensagens", icon: "message" },
   { href: "/painel/equipe", label: "Equipe", icon: "users" },
   { href: "/painel/rede", label: "Rede local", icon: "building" },
   { href: "/painel/empresa", label: "Empresa", icon: "building" },
@@ -42,9 +45,11 @@ function isActive(pathname: string, href: string): boolean {
 export function NavRail({
   header,
   email,
+  unreadMessages = 0,
 }: {
   header: React.ReactNode;
   email: string;
+  unreadMessages?: number;
 }) {
   const pathname = usePathname();
 
@@ -78,6 +83,11 @@ export function NavRail({
                 >
                   <Icon size={16} strokeWidth={1.75} aria-hidden />
                   {item.label}
+                  {item.href === "/painel/mensagens" && unreadMessages > 0 ? (
+                    <span className="ml-auto grid min-w-4 place-items-center rounded-full bg-brand px-1 text-[0.6875rem] font-semibold text-fg-onbrand tnum">
+                      {unreadMessages}
+                    </span>
+                  ) : null}
                 </Link>
               </li>
             );

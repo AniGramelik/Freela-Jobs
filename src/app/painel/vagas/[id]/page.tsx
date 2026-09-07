@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { ArrowLeft, FileText } from "lucide-react";
+import { ArrowLeft, FileText, MessageSquare } from "lucide-react";
 
 import { Button, buttonClass } from "@/components/ui/button";
 import { EmptyState, PageHeader, PageShell } from "@/components/ui/layout";
@@ -21,6 +21,8 @@ import {
   screenApplication,
 } from "@/use-cases/applications";
 import { cancelJob, featureJob } from "@/use-cases/job-postings";
+
+import { startCompanyConversationAction } from "../../mensagens/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -189,9 +191,30 @@ export default async function VagaPainelPage({
                     </StatusPill>
                   </TD>
                   <TD>
-                    {steps.length > 0 || canOffer ? (
-                      <div className="flex flex-wrap justify-end gap-1.5">
-                        {steps.map(([to, label]) => (
+                    <div className="flex flex-wrap justify-end gap-1.5">
+                      <form action={startCompanyConversationAction}>
+                        <input
+                          type="hidden"
+                          name="professionalProfileId"
+                          value={a.professionalProfile.id}
+                        />
+                        <input type="hidden" name="jobPostingId" value={id} />
+                        <button
+                          type="submit"
+                          className={buttonClass("ghost", "sm")}
+                          aria-label="Conversar"
+                        >
+                          <MessageSquare
+                            size={14}
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                          Conversar
+                        </button>
+                      </form>
+                      {steps.length > 0 || canOffer ? (
+                        <>
+                          {steps.map(([to, label]) => (
                           <form key={to} action={screen}>
                             <input
                               type="hidden"
@@ -225,12 +248,9 @@ export default async function VagaPainelPage({
                             </button>
                           </form>
                         ) : null}
-                      </div>
-                    ) : (
-                      <span className="block text-right text-[0.8125rem] text-fg-subtle">
-                        —
-                      </span>
-                    )}
+                        </>
+                      ) : null}
+                    </div>
                   </TD>
                 </TR>
               );
