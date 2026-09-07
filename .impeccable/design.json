@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-09-07T00:00:00Z",
+  "title": "Design System: Freela Jobs",
+  "extensions": {
+    "colorMeta": {
+      "brand": { "role": "primary", "displayName": "Saturated Azure", "canonical": "oklch(0.55 0.188 249)", "dark": "oklch(0.66 0.172 249)", "tonalRamp": ["oklch(0.20 0.09 249)", "oklch(0.28 0.12 249)", "oklch(0.36 0.15 249)", "oklch(0.45 0.18 249)", "oklch(0.55 0.188 249)", "oklch(0.68 0.16 249)", "oklch(0.82 0.10 249)", "oklch(0.955 0.038 249)"] },
+      "brand-hover": { "role": "primary", "displayName": "Azure Hover", "canonical": "oklch(0.48 0.188 249)", "dark": "oklch(0.73 0.16 249)" },
+      "brand-soft": { "role": "primary", "displayName": "Azure Soft", "canonical": "oklch(0.955 0.038 249)", "dark": "oklch(0.32 0.072 249)" },
+      "ring": { "role": "primary", "displayName": "Focus Ring Azure", "canonical": "oklch(0.6 0.19 249)", "dark": "oklch(0.7 0.17 249)" },
+      "pos": { "role": "tertiary", "displayName": "Outcome Green", "canonical": "oklch(0.52 0.13 150)", "dark": "oklch(0.72 0.14 150)", "tonalRamp": ["oklch(0.22 0.06 150)", "oklch(0.30 0.08 150)", "oklch(0.38 0.10 150)", "oklch(0.45 0.12 150)", "oklch(0.52 0.13 150)", "oklch(0.66 0.12 150)", "oklch(0.82 0.08 150)", "oklch(0.955 0.04 150)"] },
+      "pos-soft": { "role": "tertiary", "displayName": "Green Soft", "canonical": "oklch(0.955 0.04 150)", "dark": "oklch(0.32 0.06 150)" },
+      "neg": { "role": "tertiary", "displayName": "Outcome Red", "canonical": "oklch(0.53 0.2 25)", "dark": "oklch(0.68 0.17 25)", "tonalRamp": ["oklch(0.22 0.09 25)", "oklch(0.30 0.12 25)", "oklch(0.38 0.15 25)", "oklch(0.45 0.18 25)", "oklch(0.53 0.2 25)", "oklch(0.66 0.17 25)", "oklch(0.82 0.10 25)", "oklch(0.96 0.03 25)"] },
+      "neg-soft": { "role": "tertiary", "displayName": "Red Soft", "canonical": "oklch(0.96 0.03 25)", "dark": "oklch(0.33 0.08 25)" },
+      "pend": { "role": "tertiary", "displayName": "Pending Amber", "canonical": "oklch(0.62 0.13 75)", "dark": "oklch(0.76 0.13 80)", "tonalRamp": ["oklch(0.28 0.07 75)", "oklch(0.36 0.09 75)", "oklch(0.44 0.11 75)", "oklch(0.53 0.12 75)", "oklch(0.62 0.13 75)", "oklch(0.74 0.12 75)", "oklch(0.86 0.08 78)", "oklch(0.96 0.05 80)"] },
+      "pend-soft": { "role": "tertiary", "displayName": "Amber Soft", "canonical": "oklch(0.96 0.05 80)", "dark": "oklch(0.34 0.06 80)" },
+      "canvas": { "role": "neutral", "displayName": "Canvas", "canonical": "oklch(0.985 0.002 255)", "dark": "oklch(0.18 0.008 260)" },
+      "panel": { "role": "neutral", "displayName": "Panel White", "canonical": "#ffffff", "dark": "oklch(0.215 0.009 260)" },
+      "panel-2": { "role": "neutral", "displayName": "Panel Recessed", "canonical": "oklch(0.975 0.003 255)", "dark": "oklch(0.245 0.01 260)" },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "oklch(0.922 0.004 255)", "dark": "oklch(0.31 0.011 260)" },
+      "hairline-strong": { "role": "neutral", "displayName": "Hairline Strong", "canonical": "oklch(0.86 0.005 255)", "dark": "oklch(0.4 0.012 260)" },
+      "fg": { "role": "neutral", "displayName": "Foreground", "canonical": "oklch(0.24 0.012 260)", "dark": "oklch(0.94 0.006 260)", "tonalRamp": ["oklch(0.20 0.012 260)", "oklch(0.30 0.012 260)", "oklch(0.40 0.011 260)", "oklch(0.50 0.010 260)", "oklch(0.60 0.008 260)", "oklch(0.72 0.006 260)", "oklch(0.86 0.004 260)", "oklch(0.96 0.003 260)"] },
+      "fg-muted": { "role": "neutral", "displayName": "Foreground Muted", "canonical": "oklch(0.46 0.01 260)", "dark": "oklch(0.72 0.012 260)" },
+      "fg-subtle": { "role": "neutral", "displayName": "Foreground Subtle", "canonical": "oklch(0.6 0.008 260)", "dark": "oklch(0.58 0.012 260)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "The Tally numeral on the call-out detail. The only text this large; nothing else uses it." },
+      "headline": { "displayName": "Headline", "purpose": "Auth-card page titles (/entrar, /assumir)." },
+      "title": { "displayName": "Title", "purpose": "PageHeader H1 and every /prof/* page H1. The default page heading." },
+      "body": { "displayName": "Body", "purpose": "Default UI text, table cells, meta lines. cv05 + ss01 character variants on." },
+      "label": { "displayName": "Label", "purpose": "Field labels, hints, nav items, section labels (at 600 weight). Sentence case, no uppercase." },
+      "caption": { "displayName": "Caption", "purpose": "Table headers, status pill text, disclaimers. Tab-bar labels drop to 11px." }
+    },
+    "shadows": [
+      { "name": "shadow-sm", "value": "0 1px 2px oklch(0.2 0.03 260 / 0.06), 0 1px 3px oklch(0.2 0.03 260 / 0.05)", "purpose": "The only elevation in use. Every panel, table, and card: border-hairline + this." },
+      { "name": "button-primary-inset", "value": "inset 0 1px 0 oklch(1 0 0 / 0.12)", "purpose": "1px top highlight on the primary button for slight physicality. Not a drop shadow." },
+      { "name": "shadow-md", "value": "0 2px 6px oklch(0.2 0.03 260 / 0.08), 0 4px 16px oklch(0.2 0.03 260 / 0.06)", "purpose": "Defined in globals.css but unreferenced by any shipped surface. Available primitive, not a documented role." },
+      { "name": "shadow-pop", "value": "0 4px 12px oklch(0.2 0.03 260 / 0.1), 0 12px 32px oklch(0.2 0.03 260 / 0.12)", "purpose": "Defined in globals.css but unreferenced by any shipped surface. Available primitive, not a documented role." }
+    ],
+    "motion": [
+      { "name": "transition-fast", "value": "150ms", "purpose": "Default duration for color/width transitions on buttons, inputs, nav, and the tally fill bar." },
+      { "name": "ease-land", "value": "cubic-bezier(0.33, 1, 0.68, 1)", "purpose": "Easing for the .fj-land landing highlight (620ms total: color arrives instantly, holds ~22%, fades)." },
+      { "name": "fj-land", "value": "fj-pulse-in 620ms cubic-bezier(0.33, 1, 0.68, 1)", "purpose": "Landing highlight for a row/tally whose state just changed. Currently has no caller; staged for the SSE realtime wiring. prefers-reduced-motion removes it." },
+      { "name": "reduced-motion", "value": "prefers-reduced-motion: reduce", "purpose": "Removes .fj-land and all width/position transitions; state changes snap into place." }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one azure action per surface. Server-action forms use the SubmitButton variant with a pendingLabel.",
+      "html": "<button class=\"ds-btn-primary\">Topar</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; height: 2.25rem; padding: 0 0.875rem; border: none; border-radius: 0.5rem; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: -0.006em; white-space: nowrap; color: var(--color-fg-onbrand, #fff); background: var(--color-brand, oklch(0.55 0.188 249)); box-shadow: inset 0 1px 0 oklch(1 0 0 / 0.12); transition: background-color 150ms; cursor: pointer; } .ds-btn-primary:hover { background: var(--color-brand-hover, oklch(0.48 0.188 249)); } .ds-btn-primary:focus-visible { outline: 2px solid var(--color-ring, oklch(0.6 0.19 249)); outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.45; pointer-events: none; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Neutral action alongside the primary; panel fill with a strong hairline edge.",
+      "html": "<button class=\"ds-btn-secondary\">Passar</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; height: 2.25rem; padding: 0 0.875rem; border: 1px solid var(--color-hairline-strong, oklch(0.86 0.005 255)); border-radius: 0.5rem; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; font-weight: 500; letter-spacing: -0.006em; white-space: nowrap; color: var(--color-fg, oklch(0.24 0.012 260)); background: var(--color-panel, #fff); transition: background-color 150ms; cursor: pointer; } .ds-btn-secondary:hover { background: var(--color-panel-2, oklch(0.975 0.003 255)); } .ds-btn-secondary:focus-visible { outline: 2px solid var(--color-ring, oklch(0.6 0.19 249)); outline-offset: 2px; } .ds-btn-secondary:disabled { opacity: 0.45; pointer-events: none; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Demoted action: no fill or border at rest. Used for 'Cancelar', inline 'Salvar', mobile 'Desistir'.",
+      "html": "<button class=\"ds-btn-ghost\">Cancelar</button>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; gap: 0.375rem; height: 2rem; padding: 0 0.625rem; border: none; border-radius: 0.5rem; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; letter-spacing: -0.006em; white-space: nowrap; color: var(--color-fg-muted, oklch(0.46 0.01 260)); background: transparent; transition: background-color 150ms, color 150ms; cursor: pointer; } .ds-btn-ghost:hover { background: var(--color-panel-2, oklch(0.975 0.003 255)); color: var(--color-fg, oklch(0.24 0.012 260)); } .ds-btn-ghost:focus-visible { outline: 2px solid var(--color-ring, oklch(0.6 0.19 249)); outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Shared control class for Input/Textarea/Select. Border shifts to brand on focus with an inset 2px ring; no glow.",
+      "html": "<input class=\"ds-input\" placeholder=\"nota interna\" />",
+      "css": ".ds-input { width: 100%; height: 2.25rem; padding: 0 0.75rem; border: 1px solid var(--color-hairline-strong, oklch(0.86 0.005 255)); border-radius: 0.5rem; background: var(--color-panel, #fff); font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; letter-spacing: -0.006em; color: var(--color-fg, oklch(0.24 0.012 260)); transition: border-color 150ms; } .ds-input::placeholder { color: var(--color-fg-subtle, oklch(0.6 0.008 255)); } .ds-input:focus { outline: 2px solid var(--color-ring, oklch(0.6 0.19 249)); outline-offset: -1px; border-color: var(--color-brand, oklch(0.55 0.188 249)); } .ds-input:disabled { opacity: 0.5; background: var(--color-panel-2, oklch(0.975 0.003 255)); }"
+    },
+    {
+      "name": "Status Pill",
+      "kind": "chip",
+      "refersTo": "status-pill",
+      "description": "The printed form of a domain enum. Fully round, soft-hue fill, solid-hue text, matching /25 border, optional leading dot. Tone is always semantic.",
+      "html": "<span class=\"ds-pill ds-pill-brand\"><span class=\"ds-pill-dot\"></span>No ar</span>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.75rem; font-weight: 500; line-height: 1.25rem; white-space: nowrap; } .ds-pill-dot { width: 0.375rem; height: 0.375rem; border-radius: 9999px; background: currentColor; } .ds-pill-brand { background: var(--color-brand-soft, oklch(0.955 0.038 249)); color: var(--color-brand, oklch(0.55 0.188 249)); border-color: color-mix(in oklch, var(--color-brand, oklch(0.55 0.188 249)) 25%, transparent); } .ds-pill-neutral { background: var(--color-panel-2, oklch(0.975 0.003 255)); color: var(--color-fg-muted, oklch(0.46 0.01 260)); border-color: var(--color-hairline-strong, oklch(0.86 0.005 255)); } .ds-pill-pos { background: var(--color-pos-soft, oklch(0.955 0.04 150)); color: var(--color-pos, oklch(0.52 0.13 150)); border-color: color-mix(in oklch, var(--color-pos, oklch(0.52 0.13 150)) 25%, transparent); } .ds-pill-neg { background: var(--color-neg-soft, oklch(0.96 0.03 25)); color: var(--color-neg, oklch(0.53 0.2 25)); border-color: color-mix(in oklch, var(--color-neg, oklch(0.53 0.2 25)) 25%, transparent); } .ds-pill-pend { background: var(--color-pend-soft, oklch(0.96 0.05 80)); color: var(--color-pend, oklch(0.62 0.13 75)); border-color: color-mix(in oklch, var(--color-pend, oklch(0.62 0.13 75)) 25%, transparent); }"
+    },
+    {
+      "name": "Panel",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Every elevated container. Hairline border + shadow-sm, 12px radius, panel fill. No hover-lift.",
+      "html": "<section class=\"ds-panel\">Conteúdo</section>",
+      "css": ".ds-panel { border: 1px solid var(--color-hairline, oklch(0.922 0.004 255)); border-radius: 0.75rem; background: var(--color-panel, #fff); box-shadow: 0 1px 2px oklch(0.2 0.03 260 / 0.06), 0 1px 3px oklch(0.2 0.03 260 / 0.05); padding: 1rem; } @media (min-width: 640px) { .ds-panel { padding: 1.25rem; } }"
+    },
+    {
+      "name": "Roll-Call Table",
+      "kind": "custom",
+      "refersTo": "table-row-focused",
+      "description": "The system's base pattern: scannable table of one domain object. The actionable row gets a brand-soft/60 wash (focused); all others recede to hover-only. Exactly one focused row.",
+      "html": "<div class=\"ds-table-wrap\"><table class=\"ds-table\"><thead><tr><th>Profissional</th><th>Situação</th></tr></thead><tbody><tr class=\"ds-tr ds-tr-focused\"><td>Ana Dutra</td><td><span class=\"ds-cell-pill\">Topou</span></td></tr><tr class=\"ds-tr\"><td>Marcos Lima</td><td><span class=\"ds-cell-pill\">Recusou</span></td></tr></tbody></table></div>",
+      "css": ".ds-table-wrap { overflow-x: auto; border: 1px solid var(--color-hairline, oklch(0.922 0.004 255)); border-radius: 0.75rem; background: var(--color-panel, #fff); box-shadow: 0 1px 2px oklch(0.2 0.03 260 / 0.06), 0 1px 3px oklch(0.2 0.03 260 / 0.05); } .ds-table { width: 100%; border-collapse: collapse; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.875rem; color: var(--color-fg, oklch(0.24 0.012 260)); } .ds-table thead { background: var(--color-panel-2, oklch(0.975 0.003 255)); border-bottom: 1px solid var(--color-hairline, oklch(0.922 0.004 255)); text-align: left; } .ds-table th { padding: 0.625rem 0.875rem; font-size: 0.75rem; font-weight: 600; color: var(--color-fg-subtle, oklch(0.6 0.008 255)); } .ds-table td { padding: 0.75rem 0.875rem; vertical-align: middle; } .ds-tr { transition: background-color 150ms; border-top: 1px solid var(--color-hairline, oklch(0.922 0.004 255)); } .ds-tr:hover { background: var(--color-panel-2, oklch(0.975 0.003 255)); } .ds-tr-focused, .ds-tr-focused:hover { background: color-mix(in oklch, var(--color-brand-soft, oklch(0.955 0.038 249)) 60%, transparent); } .ds-cell-pill { display: inline-flex; align-items: center; padding: 0.125rem 0.5rem; border-radius: 9999px; border: 1px solid var(--color-hairline-strong, oklch(0.86 0.005 255)); background: var(--color-panel-2, oklch(0.975 0.003 255)); color: var(--color-fg-muted, oklch(0.46 0.01 260)); font-size: 0.75rem; font-weight: 500; }"
+    },
+    {
+      "name": "Vagas Tally",
+      "kind": "custom",
+      "refersTo": "button-primary",
+      "description": "The focal element of the call-out detail and the system's one deliberate scale jump. Tabular 30px numeral over a thin fill bar; numeral and bar flip to green (pos) when filled >= total. Width animates on a 150ms ease-out; reduced-motion removes it.",
+      "html": "<div class=\"ds-tally\"><div class=\"ds-tally-row\"><span class=\"ds-tally-num\">4</span><span class=\"ds-tally-total\">/6</span><span class=\"ds-tally-label\">vagas</span></div><div class=\"ds-tally-track\"><div class=\"ds-tally-fill\" style=\"width:66%\"></div></div></div>",
+      "css": ".ds-tally { display: flex; flex-direction: column; align-items: flex-end; gap: 0.375rem; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; } .ds-tally-row { display: flex; align-items: baseline; gap: 0.25rem; } .ds-tally-num { font-size: 1.875rem; font-weight: 600; line-height: 1; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--color-fg, oklch(0.24 0.012 260)); } .ds-tally-total { font-size: 1.125rem; font-weight: 500; line-height: 1; font-variant-numeric: tabular-nums; color: var(--color-fg-subtle, oklch(0.6 0.008 255)); } .ds-tally-label { margin-left: 0.25rem; font-size: 0.8125rem; color: var(--color-fg-subtle, oklch(0.6 0.008 255)); } .ds-tally-track { width: 7rem; height: 0.25rem; border-radius: 9999px; overflow: hidden; background: var(--color-hairline, oklch(0.922 0.004 255)); } .ds-tally-fill { height: 100%; border-radius: 9999px; background: var(--color-brand, oklch(0.55 0.188 249)); transition: width 150ms ease-out; } @media (prefers-reduced-motion: reduce) { .ds-tally-fill { transition: none; } }"
+    },
+    {
+      "name": "Company Nav Rail Item",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "Company shell nav. Default fg-muted; hover panel-2 + fg; active brand-soft fill + brand text with aria-current. 16px icon at stroke 1.75.",
+      "html": "<a class=\"ds-nav-item ds-nav-item-active\" aria-current=\"page\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4.9 19.1C1 15.2 1 8.8 4.9 4.9\"/><path d=\"M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.4\"/><circle cx=\"12\" cy=\"12\" r=\"2\"/><path d=\"M16.2 7.8c2.3 2.3 2.3 6.1 0 8.4\"/><path d=\"M19.1 4.9C23 8.8 23 15.2 19.1 19.1\"/></svg>Convocações</a>",
+      "css": ".ds-nav-item { display: flex; align-items: center; gap: 0.5rem; padding: 0.375rem 0.625rem; border-radius: 0.5rem; font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif; font-size: 0.8125rem; font-weight: 500; text-decoration: none; color: var(--color-fg-muted, oklch(0.46 0.01 260)); transition: background-color 150ms, color 150ms; } .ds-nav-item:hover { background: var(--color-panel-2, oklch(0.975 0.003 255)); color: var(--color-fg, oklch(0.24 0.012 260)); } .ds-nav-item-active { background: var(--color-brand-soft, oklch(0.955 0.038 249)); color: var(--color-brand, oklch(0.55 0.188 249)); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Operations Console",
+    "overview": "Freela Jobs is a console for getting a shift covered under time pressure. Its reference bar is Linear, Stripe Dashboard, and Vercel Dashboard, and the convention is executed straight: no irony, no quirk, no house-style flourish. Every surface is a scannable table of one domain object with a fixed row anatomy - identity, facts, status, actions - and every detail page is one object in focus above its own sub-list. The grid-of-cards dashboard is refused outright.\n\nThe palette is near-neutral grey carrying a single saturated azure accent (hue ~249, deliberately not indigo) plus semantic green / amber / red for outcomes. Depth is a hairline border and a low, soft shadow - never a heavy lifted card. The type face is a workhorse (Geist Sans); counts, times, and phone numbers are set in tabular figures. Light theme is the anchor because the company user works at a counter under hard light; dark theme is fully built, and the professional PWA follows the OS. Forms are inline pages, not modals.\n\nDensity is high but not cramped: 8-14 px type does most of the work, controls are 32-36 px tall, and the widest reading column is 6xl. The one moment the system raises its voice is the vagas tally on the call-out detail - a 30 px tabular numeral with a thin fill bar - and it earns that scale by being the single number the manager is waiting on.",
+    "keyCharacteristics": [
+      "Table-first: every index is a hairline table; every detail is a focused object plus a sub-list table.",
+      "One azure accent, reserved for the primary action, \"now\" status, active nav, and the focus ring.",
+      "Elevation is hairline + shadow-sm; heavy cards are never used.",
+      "Tabular numerals everywhere a number is compared or scanned.",
+      "Sentence-case labels; no uppercase kickers or eyebrows.",
+      "Light-first, real dark theme, PWA follows the OS."
+    ],
+    "rules": [
+      { "name": "The One Accent Rule", "body": "Azure is the only non-semantic color in the system. It marks the primary action, the \"now\" status, the active nav item, and the focus ring - nothing else. If a surface has more than one azure element competing for attention, one of them is wrong.", "section": "colors" },
+      { "name": "The Color-Is-Status Rule", "body": "Green, amber, and red never decorate. A colored pill or number always encodes a domain state (ACCEPTED, NO_SHOW, FILLED, ...). Neutral is the resting state; color is a signal.", "section": "colors" },
+      { "name": "The Everything-Hairline Rule", "body": "The default border color for every element is hairline. Reach for hairline-strong only on interactive edges (inputs, secondary buttons, empty states).", "section": "colors" },
+      { "name": "The Tabular Number Rule", "body": "Any figure that is compared or scanned - vaga counts, shift times, phone numbers, the OTP field, ratings - carries the tnum utility (font-variant-numeric: tabular-nums). Prose numbers do not.", "section": "typography" },
+      { "name": "The Sentence-Case Label Rule", "body": "Labels, section headers, and nav items are sentence case at 12-13 px medium. There are no uppercase kickers, eyebrows, or all-caps headings. The only uppercase in the codebase is the two-letter UF (state) input, normalizing user data - not a type style.", "section": "typography" },
+      { "name": "The One Big Number Rule", "body": "text-3xl is reserved for the tally. If a new surface wants a hero number, it needs the same justification: a single value the user is actively waiting on.", "section": "typography" },
+      { "name": "The Hairline-First Rule", "body": "Elevation is border-hairline + shadow-sm. If that isn't enough separation, the layout is too dense - fix the spacing, don't add a bigger shadow. Heavy or colored drop shadows are outside the system.", "section": "elevation" },
+      { "name": "The Focused-Row Rule", "body": "In any roll-call table, the row that is actionable right now (ACCEPTED awaiting attendance, an application awaiting triage) gets focused - a brand-soft/60 wash - and every other row recedes to hover-only. Exactly one emphasis treatment; never more than a wash.", "section": "components" }
+    ],
+    "dos": [
+      "Do build every new index as a Table with the fixed row anatomy: identity, facts, StatusPill, row actions.",
+      "Do make each detail page one object in a PageHeader (title + StatusPill + tnum meta line) above its own sub-list table.",
+      "Do route colored UI through the semantic tokens (pos/neg/pend/brand) and label enums through src/lib/labels.ts; never print a raw enum.",
+      "Do set tnum on counts, times, phone numbers, and codes.",
+      "Do use border-hairline + shadow-sm for every elevated surface, and translucency + backdrop-blur-sm for fixed nav.",
+      "Do give server-action buttons a SubmitButton with a pendingLabel.",
+      "Do keep the primary azure to one element per surface; demote everything else to secondary or ghost.",
+      "Do honor prefers-reduced-motion: the .fj-land highlight and tally/bar transitions must resolve to no animation."
+    ],
+    "donts": [
+      "Don't build a grid-of-cards dashboard; the list is the product.",
+      "Don't introduce a second accent hue or use azure for anything but the primary action, \"now\" status, active nav, and the focus ring.",
+      "Don't use --shadow-md / --shadow-pop, hover-lifts, translateY, or colored drop shadows - elevation is flat + hairline.",
+      "Don't add uppercase kickers, eyebrows, or all-caps headings; labels are sentence case at 12-13px.",
+      "Don't exceed text-3xl, and reserve that size for a single value the user is actively waiting on.",
+      "Don't put more than one focused row in a table.",
+      "Don't route /prof/* screens through PageShell/PageHeader; use the compact mobile scaffold + bottom tab bar.",
+      "Don't apply Geist Mono; tabular figures come from Geist Sans + tnum."
+    ]
+  }
+}

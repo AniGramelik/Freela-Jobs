@@ -1,7 +1,18 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { ArrowLeft, FileText } from "lucide-react";
 
+import { Button, buttonClass } from "@/components/ui/button";
+import { EmptyState, PageHeader, PageShell } from "@/components/ui/layout";
+import { StatusPill } from "@/components/ui/status-pill";
+import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import {
+  applicationStateLabel,
+  applicationStateTone,
+  jobStatusLabel,
+  jobStatusTone,
+} from "@/lib/labels";
 import { prisma } from "@/lib/prisma";
 import { requireCompanyContext } from "@/lib/session";
 import {
@@ -12,6 +23,25 @@ import {
 import { cancelJob, featureJob } from "@/use-cases/job-postings";
 
 export const dynamic = "force-dynamic";
+
+const NEXT: Record<string, [string, string][]> = {
+  SUBMITTED: [
+    ["UNDER_REVIEW", "Analisar"],
+    ["REJECTED", "Descartar"],
+  ],
+  UNDER_REVIEW: [
+    ["SHORTLISTED", "Selecionar"],
+    ["REJECTED", "Descartar"],
+  ],
+  SHORTLISTED: [["REJECTED", "Descartar"]],
+};
+
+const ACTIONABLE = new Set([
+  "SUBMITTED",
+  "UNDER_REVIEW",
+  "SHORTLISTED",
+  "OFFERED",
+]);
 
 export default async function VagaPainelPage({
   params,
@@ -60,73 +90,154 @@ export default async function VagaPainelPage({
     revalidatePath(`/painel/vagas/${id}`);
   }
 
-  const NEXT: Record<string, [string, string][]> = {
-    SUBMITTED: [
-      ["UNDER_REVIEW", "Analisar"],
-      ["REJECTED", "Descartar"],
-    ],
-    UNDER_REVIEW: [
-      ["SHORTLISTED", "Selecionar"],
-      ["REJECTED", "Descartar"],
-    ],
-    SHORTLISTED: [["REJECTED", "Descartar"]],
-  };
+  const featured = job.featuredUntil && job.featuredUntil > new Date();
 
   return (
-    <main>
-      <h1>{job.title}</h1>
-      <p>
-        {job.status} · {job.positions} vaga(s) · até{" "}
-        {job.applicationDeadline.toLocaleDateString("pt-BR")}
-        {job.featuredUntil && job.featuredUntil > new Date()
-          ? " · em destaque"
-          : ""}
-      </p>
-      <form action={feature} style={{ display: "inline" }}>
-        <button type="submit">Destacar 7 dias</button>
-      </form>
-      <form action={close} style={{ display: "inline" }}>
-        <button type="submit">Encerrar vaga</button>
-      </form>
+    <PageShell wide>
+      <Link
+        href="/painel/vagas"
+        className="mb-3 inline-flex items-center gap-1.5 text-[0.8125rem] text-fg-muted no-underline hover:text-fg"
+      >
+        <ArrowLeft size={14} strokeWidth={1.75} aria-hidden />
+        Vagas
+      </Link>
 
-      <h2>Candidaturas</h2>
+      <PageHeader
+        title={job.title}
+        meta={
+          <span className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <StatusPill tone={jobStatusTone[job.status] ?? "neutral"}>
+              {jobStatusLabel(job.status)}
+            </StatusPill>
+            <span className="tnum">{job.positions} vaga(s)</span>
+            <span aria-hidden>·</span>
+            <span className="tnum">
+              até {job.applicationDeadline.toLocaleDateString("pt-BR")}
+            </span>
+            {featured ? (
+              <StatusPill tone="brand">em destaque</StatusPill>
+            ) : null}
+          </span>
+        }
+        actions={
+          <>
+            <form action={feature}>
+              <Button type="submit" variant="secondary" size="sm">
+                Destacar 7 dias
+              </Button>
+            </form>
+            <form action={close}>
+              <Button type="submit" variant="ghost" size="sm">
+                Encerrar
+              </Button>
+            </form>
+          </>
+        }
+      />
+
+      <h2 className="mb-3 mt-2 flex items-center gap-1.5 text-[0.8125rem] font-semibold text-fg-muted">
+        Candidaturas
+        {applications.length ? (
+          <span className="tnum text-fg-subtle">{applications.length}</span>
+        ) : null}
+      </h2>
+
       {applications.length === 0 ? (
-        <p>Nenhuma candidatura.</p>
+        <EmptyState
+          icon={<FileText size={18} strokeWidth={1.75} aria-hidden />}
+          title="Nenhuma candidatura"
+          hint="Assim que alguém se candidatar, aparece aqui."
+        />
       ) : (
-        <ul>
-          {applications.map((a) => (
-            <li key={a.id}>
-              <strong>{a.professionalProfile.fullName}</strong> ·{" "}
-              {a.professionalProfile.phoneE164} · <em>{a.state}</em>
-              {a.coverMessage ? ` — "${a.coverMessage}"` : ""}
-              {a.resumeUrl ? (
-                <>
-                  {" "}
-                  <a href={a.resumeUrl}>currículo</a>
-                </>
-              ) : null}
-              <div>
-                {(NEXT[a.state] ?? []).map(([to, label]) => (
-                  <form key={to} action={screen} style={{ display: "inline" }}>
-                    <input type="hidden" name="applicationId" value={a.id} />
-                    <input type="hidden" name="to" value={to} />
-                    <button type="submit">{label}</button>
-                  </form>
-                ))}
-                {a.state === "SHORTLISTED" ? (
-                  <form action={offer} style={{ display: "inline" }}>
-                    <input type="hidden" name="applicationId" value={a.id} />
-                    <button type="submit">Fazer oferta</button>
-                  </form>
-                ) : null}
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Table>
+          <THead>
+            <TR>
+              <TH>Profissional</TH>
+              <TH className="hidden sm:table-cell">Telefone</TH>
+              <TH className="hidden md:table-cell">Mensagem</TH>
+              <TH>Situação</TH>
+              <TH className="text-right">Ações</TH>
+            </TR>
+          </THead>
+          <TBody>
+            {applications.map((a) => {
+              const steps = NEXT[a.state] ?? [];
+              const canOffer = a.state === "SHORTLISTED";
+              return (
+                <TR key={a.id} focused={ACTIONABLE.has(a.state)}>
+                  <TD className="font-medium text-fg">
+                    {a.professionalProfile.fullName}
+                    {a.resumeUrl ? (
+                      <a
+                        href={a.resumeUrl}
+                        className="ml-2 inline-flex items-center gap-1 align-middle text-[0.75rem] font-normal text-brand"
+                      >
+                        <FileText size={12} strokeWidth={1.75} aria-hidden />
+                        currículo
+                      </a>
+                    ) : null}
+                  </TD>
+                  <TD className="hidden tnum text-fg-muted sm:table-cell">
+                    {a.professionalProfile.phoneE164}
+                  </TD>
+                  <TD className="hidden max-w-[22rem] truncate text-fg-muted md:table-cell">
+                    {a.coverMessage || "—"}
+                  </TD>
+                  <TD>
+                    <StatusPill tone={applicationStateTone[a.state] ?? "neutral"}>
+                      {applicationStateLabel(a.state)}
+                    </StatusPill>
+                  </TD>
+                  <TD>
+                    {steps.length > 0 || canOffer ? (
+                      <div className="flex flex-wrap justify-end gap-1.5">
+                        {steps.map(([to, label]) => (
+                          <form key={to} action={screen}>
+                            <input
+                              type="hidden"
+                              name="applicationId"
+                              value={a.id}
+                            />
+                            <input type="hidden" name="to" value={to} />
+                            <button
+                              type="submit"
+                              className={buttonClass(
+                                to === "REJECTED" ? "ghost" : "secondary",
+                                "sm",
+                              )}
+                            >
+                              {label}
+                            </button>
+                          </form>
+                        ))}
+                        {canOffer ? (
+                          <form action={offer}>
+                            <input
+                              type="hidden"
+                              name="applicationId"
+                              value={a.id}
+                            />
+                            <button
+                              type="submit"
+                              className={buttonClass("primary", "sm")}
+                            >
+                              Fazer oferta
+                            </button>
+                          </form>
+                        ) : null}
+                      </div>
+                    ) : (
+                      <span className="block text-right text-[0.8125rem] text-fg-subtle">
+                        —
+                      </span>
+                    )}
+                  </TD>
+                </TR>
+              );
+            })}
+          </TBody>
+        </Table>
       )}
-      <p>
-        <Link href="/painel/vagas">Voltar</Link>
-      </p>
-    </main>
+    </PageShell>
   );
 }

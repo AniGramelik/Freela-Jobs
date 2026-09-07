@@ -1,5 +1,16 @@
 import Link from "next/link";
+import { CalendarClock, Plus } from "lucide-react";
 
+import { buttonClass } from "@/components/ui/button";
+import { EmptyState, PageHeader, PageShell } from "@/components/ui/layout";
+import { StatusPill } from "@/components/ui/status-pill";
+import { Table, TBody, TD, TH, THead, TR } from "@/components/ui/table";
+import {
+  jobLocationModeLabel,
+  jobStatusLabel,
+  jobStatusTone,
+  jobVinculoLabel,
+} from "@/lib/labels";
 import { prisma } from "@/lib/prisma";
 import { requireCompanyContext } from "@/lib/session";
 import { getCompanyPlan } from "@/use-cases/company-plan";
@@ -16,50 +27,81 @@ export default async function VagasPage() {
   const active = jobs.filter((j) => j.status === "PUBLISHED").length;
 
   return (
-    <main>
-      <h1>Vagas — {company.name}</h1>
-      <p>
-        Plano {plan.tier} · {active}/{plan.activeJobLimit} vagas ativas.
-      </p>
-      <p>
-        <Link href="/painel/vagas/nova">Publicar vaga</Link>
-      </p>
+    <PageShell wide>
+      <PageHeader
+        title="Vagas"
+        meta={`Plano ${plan.tier} · ${active}/${plan.activeJobLimit} vagas ativas`}
+        actions={
+          <Link
+            href="/painel/vagas/nova"
+            className={buttonClass("primary", "md")}
+          >
+            <Plus size={16} strokeWidth={2} aria-hidden />
+            Publicar vaga
+          </Link>
+        }
+      />
 
       {jobs.length === 0 ? (
-        <p>Nenhuma vaga ainda.</p>
+        <EmptyState
+          icon={<CalendarClock size={18} strokeWidth={1.75} aria-hidden />}
+          title="Nenhuma vaga ainda"
+          hint="Publique uma vaga no mural e comece a receber candidaturas."
+          action={
+            <Link
+              href="/painel/vagas/nova"
+              className={buttonClass("primary", "sm")}
+            >
+              Publicar vaga
+            </Link>
+          }
+        />
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Título</th>
-              <th>Vínculo</th>
-              <th>Local</th>
-              <th>Vagas</th>
-              <th>Status</th>
-              <th>Prazo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobs.map((j) => (
-              <tr key={j.id}>
-                <td>{j.title}</td>
-                <td>{j.vinculo}</td>
-                <td>
-                  {j.locationMode}
-                  {j.city ? ` · ${j.city}/${j.state}` : ""}
-                </td>
-                <td>{j.positions}</td>
-                <td>{j.status}</td>
-                <td><Link href={`/painel/vagas/${j.id}`}>{j.applicationDeadline.toLocaleDateString("pt-BR")} · abrir</Link></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table>
+          <THead>
+            <TR>
+              <TH>Título</TH>
+              <TH className="hidden sm:table-cell">Vínculo</TH>
+              <TH className="hidden md:table-cell">Local</TH>
+              <TH className="text-right">Vagas</TH>
+              <TH>Status</TH>
+              <TH className="text-right">Prazo</TH>
+            </TR>
+          </THead>
+          <TBody>
+            {jobs.map((j) => {
+              return (
+                <TR key={j.id}>
+                  <TD className="font-medium text-fg">
+                    <Link
+                      href={`/painel/vagas/${j.id}`}
+                      className="no-underline hover:text-brand"
+                    >
+                      {j.title}
+                    </Link>
+                  </TD>
+                  <TD className="hidden text-fg-muted sm:table-cell">
+                    {jobVinculoLabel(j.vinculo)}
+                  </TD>
+                  <TD className="hidden text-fg-muted md:table-cell">
+                    {jobLocationModeLabel(j.locationMode)}
+                    {j.city ? ` · ${j.city}/${j.state}` : ""}
+                  </TD>
+                  <TD className="text-right tnum">{j.positions}</TD>
+                  <TD>
+                    <StatusPill tone={jobStatusTone[j.status] ?? "neutral"}>
+                      {jobStatusLabel(j.status)}
+                    </StatusPill>
+                  </TD>
+                  <TD className="text-right tnum text-fg-muted">
+                    {j.applicationDeadline.toLocaleDateString("pt-BR")}
+                  </TD>
+                </TR>
+              );
+            })}
+          </TBody>
+        </Table>
       )}
-
-      <p>
-        <Link href="/painel">Voltar</Link>
-      </p>
-    </main>
+    </PageShell>
   );
 }

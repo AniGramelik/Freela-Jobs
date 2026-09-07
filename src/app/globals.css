@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Freela Jobs — sistema visual: convenção de ferramenta operacional
+ * (barra Linear / Stripe / Vercel). Claro primeiro; tema escuro real.
+ * ------------------------------------------------------------------ */
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-full: 9999px;
+
+  /* semantic tokens resolve through :root / dark below */
+  --color-canvas: var(--sem-canvas);
+  --color-panel: var(--sem-panel);
+  --color-panel-2: var(--sem-panel-2);
+  --color-hairline: var(--sem-hairline);
+  --color-hairline-strong: var(--sem-hairline-strong);
+  --color-fg: var(--sem-fg);
+  --color-fg-muted: var(--sem-fg-muted);
+  --color-fg-subtle: var(--sem-fg-subtle);
+  --color-fg-onbrand: var(--sem-fg-onbrand);
+  --color-brand: var(--sem-brand);
+  --color-brand-hover: var(--sem-brand-hover);
+  --color-brand-soft: var(--sem-brand-soft);
+  --color-ring: var(--sem-ring);
+  --color-pos: var(--sem-pos);
+  --color-pos-soft: var(--sem-pos-soft);
+  --color-neg: var(--sem-neg);
+  --color-neg-soft: var(--sem-neg-soft);
+  --color-pend: var(--sem-pend);
+  --color-pend-soft: var(--sem-pend-soft);
+
+  --shadow-sm: 0 1px 2px oklch(0.2 0.03 260 / 0.06),
+    0 1px 3px oklch(0.2 0.03 260 / 0.05);
+  --shadow-md: 0 2px 6px oklch(0.2 0.03 260 / 0.08),
+    0 4px 16px oklch(0.2 0.03 260 / 0.06);
+  --shadow-pop: 0 4px 12px oklch(0.2 0.03 260 / 0.1),
+    0 12px 32px oklch(0.2 0.03 260 / 0.12);
+}
+
+:root {
+  color-scheme: light;
+  --sem-canvas: oklch(0.985 0.002 255);
+  --sem-panel: #ffffff;
+  --sem-panel-2: oklch(0.975 0.003 255);
+  --sem-hairline: oklch(0.922 0.004 255);
+  --sem-hairline-strong: oklch(0.86 0.005 255);
+  --sem-fg: oklch(0.24 0.012 260);
+  --sem-fg-muted: oklch(0.46 0.01 260);
+  --sem-fg-subtle: oklch(0.6 0.008 260);
+  --sem-fg-onbrand: #ffffff;
+  --sem-brand: oklch(0.55 0.188 249);
+  --sem-brand-hover: oklch(0.48 0.188 249);
+  --sem-brand-soft: oklch(0.955 0.038 249);
+  --sem-ring: oklch(0.6 0.19 249);
+  --sem-pos: oklch(0.52 0.13 150);
+  --sem-pos-soft: oklch(0.955 0.04 150);
+  --sem-neg: oklch(0.53 0.2 25);
+  --sem-neg-soft: oklch(0.96 0.03 25);
+  --sem-pend: oklch(0.62 0.13 75);
+  --sem-pend-soft: oklch(0.96 0.05 80);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --sem-canvas: oklch(0.18 0.008 260);
+    --sem-panel: oklch(0.215 0.009 260);
+    --sem-panel-2: oklch(0.245 0.01 260);
+    --sem-hairline: oklch(0.31 0.011 260);
+    --sem-hairline-strong: oklch(0.4 0.012 260);
+    --sem-fg: oklch(0.94 0.006 260);
+    --sem-fg-muted: oklch(0.72 0.012 260);
+    --sem-fg-subtle: oklch(0.58 0.012 260);
+    --sem-fg-onbrand: #ffffff;
+    --sem-brand: oklch(0.66 0.172 249);
+    --sem-brand-hover: oklch(0.73 0.16 249);
+    --sem-brand-soft: oklch(0.32 0.072 249);
+    --sem-ring: oklch(0.7 0.17 249);
+    --sem-pos: oklch(0.72 0.14 150);
+    --sem-pos-soft: oklch(0.32 0.06 150);
+    --sem-neg: oklch(0.68 0.17 25);
+    --sem-neg-soft: oklch(0.33 0.08 25);
+    --sem-pend: oklch(0.76 0.13 80);
+    --sem-pend-soft: oklch(0.34 0.06 80);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --sem-canvas: oklch(0.18 0.008 260);
+  --sem-panel: oklch(0.215 0.009 260);
+  --sem-panel-2: oklch(0.245 0.01 260);
+  --sem-hairline: oklch(0.31 0.011 260);
+  --sem-hairline-strong: oklch(0.4 0.012 260);
+  --sem-fg: oklch(0.94 0.006 260);
+  --sem-fg-muted: oklch(0.72 0.012 260);
+  --sem-fg-subtle: oklch(0.58 0.012 260);
+  --sem-fg-onbrand: #ffffff;
+  --sem-brand: oklch(0.66 0.172 249);
+  --sem-brand-hover: oklch(0.73 0.16 249);
+  --sem-brand-soft: oklch(0.32 0.072 249);
+  --sem-ring: oklch(0.7 0.17 249);
+  --sem-pos: oklch(0.72 0.14 150);
+  --sem-pos-soft: oklch(0.32 0.06 150);
+  --sem-neg: oklch(0.68 0.17 25);
+  --sem-neg-soft: oklch(0.33 0.08 25);
+  --sem-pend: oklch(0.76 0.13 80);
+  --sem-pend-soft: oklch(0.34 0.06 80);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-hairline);
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-feature-settings: "cv05" 1, "ss01" 1;
+    letter-spacing: -0.006em;
+  }
+
+  ::selection {
+    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+    color: var(--color-fg);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-xs);
+  }
+
+  ::-webkit-scrollbar {
+    width: 11px;
+    height: 11px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-hairline-strong);
+    border: 3px solid var(--color-canvas);
+    border-radius: var(--radius-full);
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-fg-subtle);
+  }
+
+  * {
+    scrollbar-color: var(--color-hairline-strong) transparent;
+  }
+
+  input,
+  textarea,
+  select,
+  button {
+    font: inherit;
+    letter-spacing: inherit;
+    caret-color: var(--color-brand);
+  }
+
+  a {
+    color: var(--color-brand);
+    text-underline-offset: 0.16em;
+    text-decoration-thickness: 1px;
+  }
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+@keyframes fj-pulse-in {
+  0% {
+    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+  }
+  22% {
+    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+/* Landing highlight for a row/tally whose state just changed. The color
+   arrives instantly and settles on a single 140 ms ease; the hold that
+   follows only lets the eye catch it. */
+.fj-land {
+  animation: fj-pulse-in 620ms cubic-bezier(0.33, 1, 0.68, 1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fj-land {
+    animation: none;
+  }
+}

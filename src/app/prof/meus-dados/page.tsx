@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { revalidatePath } from "next/cache";
 
+import { Button, buttonClass } from "@/components/ui/button";
+import { Panel } from "@/components/ui/layout";
+import { StatusPill } from "@/components/ui/status-pill";
 import { prisma } from "@/lib/prisma";
 import { requireProfessional } from "@/lib/session";
 import { setNotificationOptOut } from "@/use-cases/consent";
@@ -17,7 +19,9 @@ export default async function MeusDadosPage() {
   const { user, professionalProfileId } = await requireProfessional();
   const [data, optOuts] = await Promise.all([
     exportMyData(prisma, { userId: user.id }),
-    prisma.notificationOptOut.findMany({ where: { subjectId: professionalProfileId } }),
+    prisma.notificationOptOut.findMany({
+      where: { subjectId: professionalProfileId },
+    }),
   ]);
   const optedOut = new Set(optOuts.map((o) => o.category));
 
@@ -40,44 +44,67 @@ export default async function MeusDadosPage() {
   }
 
   return (
-    <main>
-      <h1>Meus dados</h1>
+    <main className="grid gap-4 px-4 py-6">
+      <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+        Meus dados
+      </h1>
 
-      <h2>Preferências de notificação</h2>
-      <p>Convocações e avisos essenciais não podem ser desligados.</p>
-      {OPTIONAL_CATEGORIES.map(([cat, label]) => {
-        const off = optedOut.has(cat);
-        return (
-          <form key={cat} action={togglePref}>
-            <input type="hidden" name="category" value={cat} />
-            <input type="hidden" name="optOut" value={off ? "0" : "1"} />
-            <label>
-              {label}: <strong>{off ? "desligado" : "ligado"}</strong>
-            </label>{" "}
-            <button type="submit">{off ? "Ligar" : "Desligar"}</button>
-          </form>
-        );
-      })}
+      <Panel className="grid gap-3">
+        <div>
+          <h2 className="text-[0.8125rem] font-semibold text-fg-muted">
+            Preferências de notificação
+          </h2>
+          <p className="mt-1 text-[0.8125rem] text-fg-subtle">
+            Convocações e avisos essenciais não podem ser desligados.
+          </p>
+        </div>
+        {OPTIONAL_CATEGORIES.map(([cat, label]) => {
+          const off = optedOut.has(cat);
+          return (
+            <form
+              key={cat}
+              action={togglePref}
+              className="flex items-center justify-between gap-3 border-t border-hairline pt-3 first:border-0 first:pt-0"
+            >
+              <input type="hidden" name="category" value={cat} />
+              <input type="hidden" name="optOut" value={off ? "0" : "1"} />
+              <span className="flex items-center gap-2 text-[0.875rem] text-fg">
+                {label}
+                <StatusPill tone={off ? "neutral" : "pos"} dotted={false}>
+                  {off ? "desligado" : "ligado"}
+                </StatusPill>
+              </span>
+              <button type="submit" className={buttonClass("secondary", "sm")}>
+                {off ? "Ligar" : "Desligar"}
+              </button>
+            </form>
+          );
+        })}
+      </Panel>
 
-      <h2>Exportar meus dados</h2>
-      <pre
-        style={{ maxHeight: 240, overflow: "auto", background: "#f4f4f4" }}
-      >
-        {JSON.stringify(data, null, 2)}
-      </pre>
+      <Panel className="grid gap-2">
+        <h2 className="text-[0.8125rem] font-semibold text-fg-muted">
+          Exportar meus dados
+        </h2>
+        <pre className="tnum max-h-60 overflow-auto rounded-md border border-hairline bg-panel-2 p-3 text-[0.75rem] leading-relaxed text-fg-muted">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </Panel>
 
-      <h2>Excluir minha conta</h2>
-      <form action={askDeletion}>
-        <p>
+      <Panel className="grid gap-3">
+        <h2 className="text-[0.8125rem] font-semibold text-fg-muted">
+          Excluir minha conta
+        </h2>
+        <p className="text-[0.8125rem] leading-relaxed text-fg-subtle">
           Isso remove seus dados pessoais. O histórico de trabalho fica de forma
           pseudonimizada, pela necessidade legítima das empresas.
         </p>
-        <button type="submit">Solicitar exclusão</button>
-      </form>
-
-      <p>
-        <Link href="/prof">Voltar</Link>
-      </p>
+        <form action={askDeletion}>
+          <Button type="submit" variant="danger" size="sm">
+            Solicitar exclusão
+          </Button>
+        </form>
+      </Panel>
     </main>
   );
 }

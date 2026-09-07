@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { revalidatePath } from "next/cache";
 
+import { Button } from "@/components/ui/button";
+import { Panel } from "@/components/ui/layout";
+import { StatusPill } from "@/components/ui/status-pill";
 import { prisma } from "@/lib/prisma";
 import { requireProfessional } from "@/lib/session";
 import {
@@ -52,54 +54,80 @@ export default async function DisponibilidadePage() {
   }
 
   return (
-    <main>
-      <h1>Sua disponibilidade</h1>
+    <main className="grid gap-4 px-4 py-6">
+      <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+        Sua disponibilidade
+      </h1>
 
-      <form action={toggleNow}>
-        <input type="hidden" name="on" value={availability.availableNow ? "0" : "1"} />
-        <p>
-          Status agora:{" "}
-          <strong>{availability.availableNow ? "disponível" : "indisponível"}</strong>
-        </p>
-        <button type="submit">
-          {availability.availableNow ? "Desligar" : "Ficar disponível agora (8h)"}
-        </button>
-      </form>
+      <Panel className="grid gap-3">
+        <div className="flex items-center justify-between">
+          <span className="text-[0.8125rem] text-fg-muted">Status agora</span>
+          <StatusPill tone={availability.availableNow ? "pos" : "neutral"}>
+            {availability.availableNow ? "disponível" : "indisponível"}
+          </StatusPill>
+        </div>
+        <form action={toggleNow}>
+          <input
+            type="hidden"
+            name="on"
+            value={availability.availableNow ? "0" : "1"}
+          />
+          <Button
+            type="submit"
+            variant={availability.availableNow ? "secondary" : "primary"}
+            className="w-full h-10"
+          >
+            {availability.availableNow
+              ? "Desligar"
+              : "Ficar disponível agora (8h)"}
+          </Button>
+        </form>
+      </Panel>
 
-      <form action={save}>
-        <h2>Janelas recorrentes</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Dia</th>
-              {SHIFTS.map(([s, label]) => (
-                <th key={s}>{label}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {WEEKDAYS.map((label, d) => (
-              <tr key={d}>
-                <td>{label}</td>
-                {SHIFTS.map(([shift]) => (
-                  <td key={shift}>
-                    <input
-                      type="checkbox"
-                      name={`w_${d}_${shift}`}
-                      defaultChecked={selected.has(`${d}:${shift}`)}
-                    />
-                  </td>
+      <form action={save} className="grid gap-3">
+        <h2 className="text-[0.8125rem] font-semibold text-fg-muted">
+          Janelas recorrentes
+        </h2>
+        <div className="overflow-hidden rounded-lg border border-hairline bg-panel shadow-sm">
+          <table className="w-full border-collapse text-sm">
+            <thead className="border-b border-hairline bg-panel-2">
+              <tr>
+                <th className="px-3 py-2 text-left text-[0.75rem] font-semibold text-fg-subtle">
+                  Dia
+                </th>
+                {SHIFTS.map(([s, label]) => (
+                  <th
+                    key={s}
+                    className="px-3 py-2 text-center text-[0.75rem] font-semibold text-fg-subtle"
+                  >
+                    {label}
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
-        <button type="submit">Salvar janelas</button>
+            </thead>
+            <tbody className="divide-y divide-hairline">
+              {WEEKDAYS.map((label, d) => (
+                <tr key={d}>
+                  <td className="px-3 py-2.5 font-medium text-fg">{label}</td>
+                  {SHIFTS.map(([shift]) => (
+                    <td key={shift} className="px-3 py-2.5 text-center">
+                      <input
+                        type="checkbox"
+                        name={`w_${d}_${shift}`}
+                        defaultChecked={selected.has(`${d}:${shift}`)}
+                        className="size-4 accent-[var(--color-brand)]"
+                      />
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <Button type="submit" variant="secondary" className="h-10">
+          Salvar janelas
+        </Button>
       </form>
-
-      <p>
-        <Link href="/prof">Voltar</Link>
-      </p>
     </main>
   );
 }

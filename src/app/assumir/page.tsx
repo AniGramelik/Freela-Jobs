@@ -3,6 +3,10 @@
 import { useSearchParams } from "next/navigation";
 import { Suspense, useActionState } from "react";
 
+import { AuthCard } from "@/components/app/auth-card";
+import { Button } from "@/components/ui/button";
+import { Field, FormError, Input } from "@/components/ui/field";
+
 import {
   completeClaimAction,
   requestOtpAction,
@@ -21,42 +25,55 @@ function ClaimForm() {
   );
   const sent = reqState?.codeSent;
 
+  if (!token) {
+    return (
+      <AuthCard title="Assumir seu perfil">
+        <FormError>Link sem token.</FormError>
+      </AuthCard>
+    );
+  }
+
   return (
-    <main>
-      <h1>Assumir seu perfil</h1>
-      {!token ? (
-        <p role="alert">Link sem token.</p>
-      ) : !sent ? (
-        <form action={reqAction}>
+    <AuthCard
+      title="Assumir seu perfil"
+      hint={
+        sent
+          ? "Digite o código que enviamos e escolha o e-mail de acesso."
+          : "Vamos enviar um código para o telefone do seu cadastro."
+      }
+    >
+      {!sent ? (
+        <form action={reqAction} className="grid gap-3">
           <input type="hidden" name="token" value={token} />
-          <p>Vamos enviar um código para o seu telefone cadastrado.</p>
-          {reqState?.error ? <p role="alert">{reqState.error}</p> : null}
-          <button type="submit" disabled={reqPending}>
+          {reqState?.error ? <FormError>{reqState.error}</FormError> : null}
+          <Button type="submit" disabled={reqPending}>
             {reqPending ? "Enviando…" : "Enviar código"}
-          </button>
+          </Button>
         </form>
       ) : (
-        <form action={action}>
+        <form action={action} className="grid gap-4">
           <input type="hidden" name="token" value={token} />
-          <p>
-            <label>
-              Código recebido{" "}
-              <input name="code" inputMode="numeric" pattern="\d{6}" required />
-            </label>
-          </p>
-          <p>
-            <label>
-              Seu e-mail (para acessar depois){" "}
-              <input name="email" type="email" required />
-            </label>
-          </p>
-          {state?.error ? <p role="alert">{state.error}</p> : null}
-          <button type="submit" disabled={pending}>
+          <Field label="Código recebido" htmlFor="code">
+            <Input
+              id="code"
+              name="code"
+              inputMode="numeric"
+              pattern="\d{6}"
+              required
+              autoFocus
+              className="tnum tracking-[0.3em]"
+            />
+          </Field>
+          <Field label="Seu e-mail" htmlFor="claim-email" hint="para acessar depois">
+            <Input id="claim-email" name="email" type="email" required />
+          </Field>
+          {state?.error ? <FormError>{state.error}</FormError> : null}
+          <Button type="submit" disabled={pending} className="mt-1">
             {pending ? "Confirmando…" : "Assumir perfil"}
-          </button>
+          </Button>
         </form>
       )}
-    </main>
+    </AuthCard>
   );
 }
 

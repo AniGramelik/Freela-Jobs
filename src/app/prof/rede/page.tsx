@@ -1,6 +1,9 @@
-import Link from "next/link";
 import { revalidatePath } from "next/cache";
 
+import { Button } from "@/components/ui/button";
+import { Field, Input } from "@/components/ui/field";
+import { Panel } from "@/components/ui/layout";
+import { StatusPill } from "@/components/ui/status-pill";
 import { prisma } from "@/lib/prisma";
 import { requireProfessional } from "@/lib/session";
 import {
@@ -47,71 +50,76 @@ export default async function ProfRedePage() {
   }
 
   return (
-    <main>
-      <h1>Rede local</h1>
-      <p>
-        Status: <strong>{active ? "visível" : "fora da rede"}</strong>
-      </p>
+    <main className="grid gap-4 px-4 py-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+          Rede local
+        </h1>
+        <StatusPill tone={active ? "pos" : "neutral"}>
+          {active ? "visível" : "fora da rede"}
+        </StatusPill>
+      </div>
 
       <form action={save}>
-        <p>
-          <label>
-            Funções que aparecem (vírgula){" "}
-            <input
+        <Panel className="grid gap-4">
+          <Field
+            label="Funções que aparecem"
+            htmlFor="roles"
+            hint="separadas por vírgula"
+          >
+            <Input
+              id="roles"
               name="roles"
-              type="text"
               defaultValue={listing?.roles.join(", ") ?? ""}
               placeholder="garçom, apoio"
             />
-          </label>
-        </p>
-        <p>
-          <label>
-            Raio de atendimento (km){" "}
-            <input
+          </Field>
+          <Field label="Raio de atendimento (km)" htmlFor="radiusKm">
+            <Input
+              id="radiusKm"
               name="radiusKm"
               type="number"
               min={1}
               defaultValue={listing?.radiusKm ?? 30}
+              className="tnum"
             />
-          </label>
-        </p>
-        <p>
-          <label>
+          </Field>
+          <label className="flex items-center gap-2.5 text-[0.875rem] text-fg">
             <input
               type="checkbox"
               name="showPhone"
               defaultChecked={listing?.showPhone ?? false}
-            />{" "}
+              className="size-4 accent-[var(--color-brand)]"
+            />
             Mostrar meu telefone para empresas
           </label>
-        </p>
-        <button type="submit">{active ? "Atualizar" : "Entrar na rede"}</button>
+          <Button type="submit" className="h-10">
+            {active ? "Atualizar" : "Entrar na rede"}
+          </Button>
+        </Panel>
       </form>
 
       {active ? (
-        <>
+        <Panel className="grid gap-2">
           <form action={toggleReputation}>
             <input
               type="hidden"
               name="on"
               value={listing?.showReputation ? "0" : "1"}
             />
-            <button type="submit">
+            <Button type="submit" variant="secondary" size="sm">
               {listing?.showReputation
                 ? "Ocultar minha reputação"
                 : "Exibir reputação (média, sem comentários)"}
-            </button>
+            </Button>
           </form>
           <form action={stop}>
-            <button type="submit">Sair da rede</button>
+            <Button type="submit" variant="ghost" size="sm">
+              Sair da rede
+            </Button>
           </form>
-        </>
+        </Panel>
       ) : null}
-
-      <p>
-        <Link href="/prof">Voltar</Link>
-      </p>
     </main>
   );
 }
