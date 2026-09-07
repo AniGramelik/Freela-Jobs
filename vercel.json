@@ -4,6 +4,10 @@
     {
       "path": "/api/internal/outbox-tick",
       "schedule": "* * * * *"
+    },
+    {
+      "path": "/api/internal/retention-tick",
+      "schedule": "17 4 * * *"
     }
   ]
 }

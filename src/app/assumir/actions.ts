@@ -15,7 +15,14 @@ export async function requestOtpAction(
 ): Promise<ClaimState> {
   const token = String(formData.get("token") ?? "");
   const result = await requestClaimOtp(prisma, defaultOtpSender, { token });
-  if (!result.ok) return { error: "Convite inválido ou expirado." };
+  if (!result.ok) {
+    return {
+      error:
+        result.error === "rate_limited"
+          ? "Muitos pedidos de código. Aguarde alguns minutos."
+          : "Convite inválido ou expirado.",
+    };
+  }
   return { codeSent: true };
 }
 

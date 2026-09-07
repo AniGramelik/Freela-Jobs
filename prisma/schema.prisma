@@ -502,3 +502,52 @@ model InternalRating {
   @@index([companyId, professionalProfileId])
   @@index([professionalProfileId])
 }
+
+// --- LGPD: consentimento e pedidos do titular (ADR-0005, tickets 18, 19) ---
+
+enum ConsentState {
+  GRANTED
+  REVOKED
+}
+
+/// Append-only. O consentimento vigente é o registro mais recente por
+/// (subjectType, subjectId, type).
+model Consent {
+  id          String       @id @default(cuid())
+  subjectType String // "professional_profile" | "user"
+  subjectId   String
+  type        String // "public_visibility" | "public_reputation" | "application_attachment" | ...
+  textVersion String
+  state       ConsentState
+  origin      String?
+  createdAt   DateTime     @default(now())
+
+  @@index([subjectType, subjectId, type])
+}
+
+enum DataSubjectRequestType {
+  EXPORT
+  DELETION
+  CORRECTION
+}
+
+enum DataSubjectRequestState {
+  PENDING
+  IN_PROGRESS
+  DONE
+  REJECTED
+}
+
+model DataSubjectRequest {
+  id         String                  @id @default(cuid())
+  userId     String
+  type       DataSubjectRequestType
+  state      DataSubjectRequestState @default(PENDING)
+  reason     String?
+  dueAt      DateTime
+  resolvedAt DateTime?
+  createdAt  DateTime                @default(now())
+
+  @@index([userId])
+  @@index([state])
+}

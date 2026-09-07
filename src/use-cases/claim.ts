@@ -9,6 +9,7 @@ import { generateOtpCode, hashOtpCode } from "@/lib/otp";
 import { PrismaAuditRecorder } from "./audit.prisma";
 import { getUsableInvite } from "./invites";
 import { mergeDuplicateProfiles } from "./merge";
+import { consumeRateLimit } from "./rate-limit";
 
 /**
  * Envio do OTP de claim. Sem provedor de SMS no piloto (D4): o `LogOtpSender`
@@ -33,10 +34,18 @@ export async function requestClaimOtp(
   db: PrismaClient,
   sender: OtpSender,
   params: { token: string; now?: Date },
-): Promise<Result<{ sent: true }, "invalid_invite">> {
+): Promise<Result<{ sent: true }, "invalid_invite" | "rate_limited">> {
   const now = params.now ?? new Date();
   const invite = await getUsableInvite(db, { token: params.token, now });
   if (!invite) return err("invalid_invite");
+
+  const limit = await consumeRateLimit(db, {
+    key: `claim-otp:${invite.professionalProfile.phoneE164}`,
+    max: 3,
+    windowMs: 10 * 60_000,
+    now,
+  });
+  if (!limit.allowed) return err("rate_limited");
 
   const code = generateOtpCode();
   await db.phoneOtp.create({

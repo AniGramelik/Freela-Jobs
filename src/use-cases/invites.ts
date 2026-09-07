@@ -25,7 +25,7 @@ export async function sendInvite(
         professionalProfileId: params.professionalProfileId,
       },
     },
-    include: { professionalProfile: true },
+    include: { professionalProfile: true, company: { select: { name: true } } },
   });
   if (!relationship) return err("not_found");
 
@@ -68,7 +68,13 @@ export async function sendInvite(
             channel: "EMAIL",
             category: "invite",
             template: "claim_invite",
-            data: { token, professionalName: profile.fullName },
+            // Aviso de tratamento LGPD (ticket 18): quem criou o perfil.
+            data: {
+              token,
+              professionalName: profile.fullName,
+              companyName: relationship.company.name,
+              firstContact: profile.firstContactedAt === null,
+            },
           },
         ],
       },
