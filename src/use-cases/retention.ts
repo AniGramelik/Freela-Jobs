@@ -12,6 +12,7 @@ export const RETENTION = {
   phoneOtpDays: 7,
   authTokenDays: 30,
   applicationAttachmentDays: 365, // ⚠️ D1 — anexos após a vaga encerrada
+  chatIdleDays: 365, // ⚠️ D1 — conversas paradas sem vínculo entre o par
 };
 
 export type RetentionReport = {
@@ -21,6 +22,7 @@ export type RetentionReport = {
   phoneOtpsDeleted: number;
   authTokensDeleted: number;
   applicationAttachmentsCleared: number;
+  conversationsPurged: number;
 };
 
 export async function runRetention(
@@ -97,6 +99,36 @@ export async function runRetention(
     });
   }
 
+  // 5. Conversas paradas há muito tempo e sem vínculo entre a empresa e o
+  //    profissional (nenhuma necessidade legítima de guardar o histórico).
+  const idleConvos = await db.conversation.findMany({
+    where: { lastMessageAt: { lt: cutoff(RETENTION.chatIdleDays) } },
+    select: { id: true, companyId: true, professionalProfileId: true },
+  });
+  let conversationsToPurge: string[] = [];
+  if (idleConvos.length > 0) {
+    const rels = await db.workRelationship.findMany({
+      where: {
+        OR: idleConvos.map((c) => ({
+          companyId: c.companyId,
+          professionalProfileId: c.professionalProfileId,
+        })),
+      },
+      select: { companyId: true, professionalProfileId: true },
+    });
+    const relSet = new Set(
+      rels.map((r) => `${r.companyId}:${r.professionalProfileId}`),
+    );
+    conversationsToPurge = idleConvos
+      .filter((c) => !relSet.has(`${c.companyId}:${c.professionalProfileId}`))
+      .map((c) => c.id);
+  }
+  if (!dryRun && conversationsToPurge.length > 0) {
+    await db.conversation.deleteMany({
+      where: { id: { in: conversationsToPurge } },
+    });
+  }
+
   return {
     dryRun,
     invitesExpired: staleInvites.length,
@@ -104,5 +136,6 @@ export async function runRetention(
     phoneOtpsDeleted: phoneOtps,
     authTokensDeleted: authTokens,
     applicationAttachmentsCleared: attachments,
+    conversationsPurged: conversationsToPurge.length,
   };
 }

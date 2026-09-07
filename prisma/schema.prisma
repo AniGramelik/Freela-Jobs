@@ -37,6 +37,7 @@ model Company {
   plan          CompanyPlan?
   jobPostings   JobPosting[]
   callOuts      CallOut[]
+  conversations Conversation[]
 }
 
 // --- Endereço e geografia da empresa (ADR-0006, ticket 09) ---
@@ -168,6 +169,7 @@ model ProfessionalProfile {
   callOutResponses    CallOutResponse[]
   internalRatings     InternalRating[]
   applications        Application[]
+  conversations       Conversation[]
 
   @@index([phoneE164])
 }
@@ -622,4 +624,51 @@ model Report {
 
   @@index([state])
   @@index([targetType, targetId])
+}
+
+// --- Mensageria empresa ↔ profissional (ADR-0009, ticket 36) ---
+
+enum ConversationState {
+  ACTIVE
+  ARCHIVED
+}
+
+enum ChatSenderSide {
+  COMPANY
+  PROFESSIONAL
+}
+
+model Conversation {
+  id                     String            @id @default(cuid())
+  companyId              String
+  professionalProfileId  String
+  jobPostingId           String? // contexto opcional: candidatura a uma vaga
+  callOutId              String? // contexto opcional: uma convocação
+  state                  ConversationState @default(ACTIVE)
+  phoneRevealedAt        DateTime? // profissional liberou o telefone nesta conversa
+  lastMessageAt          DateTime          @default(now())
+  companyLastReadAt      DateTime?
+  professionalLastReadAt DateTime?
+  createdAt              DateTime          @default(now())
+
+  company             Company             @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  professionalProfile ProfessionalProfile @relation(fields: [professionalProfileId], references: [id], onDelete: Cascade)
+  messages            ChatMessage[]
+
+  @@unique([companyId, professionalProfileId])
+  @@index([companyId, lastMessageAt])
+  @@index([professionalProfileId, lastMessageAt])
+}
+
+model ChatMessage {
+  id             String         @id @default(cuid())
+  conversationId String
+  senderSide     ChatSenderSide
+  senderUserId   String // o User que digitou (membro da empresa ou dono do perfil)
+  body           String
+  createdAt      DateTime       @default(now())
+
+  conversation Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId, createdAt])
 }

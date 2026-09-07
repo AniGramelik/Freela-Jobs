@@ -8,6 +8,7 @@ import {
   revokeConsent,
   setNotificationOptOut,
 } from "./consent";
+import { sendMessage, startConversation } from "./chat";
 import {
   anonymizeProfile,
   exportMyData,
@@ -176,5 +177,125 @@ describe("retenção", () => {
       (await db.invite.findFirstOrThrow({ where: { professionalProfileId: idle.id } }))
         .state,
     ).toBe("EXPIRED");
+  });
+
+  it("purga conversa parada e sem vínculo; preserva a que tem vínculo", async () => {
+    const co = await db.company.create({ data: { name: "Bar" } });
+    const cUser = await db.user.create({ data: { email: "c@x.com" } });
+    await db.companyMembership.create({
+      data: { userId: cUser.id, companyId: co.id, role: "OWNER" },
+    });
+    const mk = async (name: string, tie: boolean) => {
+      const u = await db.user.create({ data: { email: `${name}@x.com` } });
+      const p = await db.professionalProfile.create({
+        data: {
+          fullName: name,
+          phoneE164: `+55279${name.length}0000000`,
+          createdByCompanyId: co.id,
+          state: "CLAIMED",
+          ownerUserId: u.id,
+          publicListing: { create: { active: true } },
+        },
+      });
+      if (tie) {
+        await db.workRelationship.create({
+          data: {
+            companyId: co.id,
+            professionalProfileId: p.id,
+            state: "ACTIVE",
+          },
+        });
+      }
+      const started = await startConversation(db, {
+        companyId: co.id,
+        professionalProfileId: p.id,
+        openerSide: "COMPANY",
+        openerUserId: cUser.id,
+      });
+      if (!started.ok) throw new Error("setup");
+      await db.conversation.update({
+        where: { id: started.value.conversationId },
+        data: { lastMessageAt: new Date(Date.now() - 400 * 86_400_000) },
+      });
+      return started.value.conversationId;
+    };
+    const loose = await mk("solto", false);
+    const bound = await mk("ligado", true);
+
+    const applied = await runRetention(db, { dryRun: false });
+    expect(applied.conversationsPurged).toBe(1);
+    expect(await db.conversation.findUnique({ where: { id: loose } })).toBeNull();
+    expect(
+      await db.conversation.findUnique({ where: { id: bound } }),
+    ).not.toBeNull();
+  });
+});
+
+describe("titular: conversas", () => {
+  async function chatScene() {
+    const co = await db.company.create({ data: { name: "Bar do Cais" } });
+    const cUser = await db.user.create({ data: { email: "dona@x.com" } });
+    await db.companyMembership.create({
+      data: { userId: cUser.id, companyId: co.id, role: "OWNER" },
+    });
+    const pUser = await db.user.create({
+      data: { email: "prof@x.com", emailVerifiedAt: new Date() },
+    });
+    const profile = await db.professionalProfile.create({
+      data: {
+        fullName: "Ana",
+        phoneE164: "+5527999123456",
+        createdByCompanyId: co.id,
+        state: "CLAIMED",
+        ownerUserId: pUser.id,
+      },
+    });
+    await db.workRelationship.create({
+      data: {
+        companyId: co.id,
+        professionalProfileId: profile.id,
+        state: "ACTIVE",
+      },
+    });
+    const started = await startConversation(db, {
+      companyId: co.id,
+      professionalProfileId: profile.id,
+      openerSide: "COMPANY",
+      openerUserId: cUser.id,
+    });
+    if (!started.ok) throw new Error("setup");
+    const conversationId = started.value.conversationId;
+    await sendMessage(db, {
+      conversationId,
+      senderUserId: cUser.id,
+      body: "combina amanhã?",
+    });
+    await sendMessage(db, {
+      conversationId,
+      senderUserId: pUser.id,
+      body: "meu segredo do titular",
+    });
+    return { pUser, profile, conversationId };
+  }
+
+  it("exportMyData inclui as mensagens do titular", async () => {
+    const { pUser } = await chatScene();
+    const data = await exportMyData(db, { userId: pUser.id });
+    expect(JSON.stringify(data)).toContain("meu segredo do titular");
+    expect(JSON.stringify(data)).toContain("combina amanhã?");
+  });
+
+  it("anonimização apaga só as mensagens do lado do titular", async () => {
+    const { profile } = await chatScene();
+    await anonymizeProfile(db, { professionalProfileId: profile.id });
+
+    const mine = await db.chatMessage.findFirstOrThrow({
+      where: { senderSide: "PROFESSIONAL" },
+    });
+    const theirs = await db.chatMessage.findFirstOrThrow({
+      where: { senderSide: "COMPANY" },
+    });
+    expect(mine.body).toBe("[removido]");
+    expect(theirs.body).toBe("combina amanhã?");
   });
 });

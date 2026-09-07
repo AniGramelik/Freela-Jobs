@@ -46,6 +46,24 @@ export async function exportMyData(
       })
     : [];
 
+  const conversations = profile
+    ? await db.conversation.findMany({
+        where: { professionalProfileId: profile.id },
+        orderBy: { createdAt: "asc" },
+        select: {
+          createdAt: true,
+          phoneRevealedAt: true,
+          jobPostingId: true,
+          callOutId: true,
+          company: { select: { name: true } },
+          messages: {
+            orderBy: { createdAt: "asc" },
+            select: { senderSide: true, body: true, createdAt: true },
+          },
+        },
+      })
+    : [];
+
   return {
     exportedAt: new Date().toISOString(),
     user,
@@ -60,6 +78,7 @@ export async function exportMyData(
           workHistory: profile.callOutResponses,
         }
       : null,
+    conversations,
     consents,
   };
 }
@@ -119,6 +138,19 @@ export async function anonymizeProfile(
     db.application.updateMany({
       where: { professionalProfileId: profile.id },
       data: { resumeUrl: null, coverMessage: null },
+    }),
+    // Mensagens do titular viram texto neutro; as da empresa ficam (registro
+    // da controladora). O telefone deixa de estar liberado em qualquer conversa.
+    db.chatMessage.updateMany({
+      where: {
+        conversation: { professionalProfileId: profile.id },
+        senderSide: "PROFESSIONAL",
+      },
+      data: { body: "[removido]" },
+    }),
+    db.conversation.updateMany({
+      where: { professionalProfileId: profile.id },
+      data: { phoneRevealedAt: null },
     }),
   ]);
   return ok({ professionalProfileId: profile.id });
