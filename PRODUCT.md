@@ -155,9 +155,12 @@ Fora de escopo ou explicitamente indefinido:
 
 ## Brand Commitments
 
-- **Nome: Freela Jobs.** Sem logo, identidade visual, paleta, tipografia ou tom
-  de voz definidos ainda — trabalho futuro não deve assumir nenhum desses
-  elementos como existente.
+- **Nome: Freela Jobs.** Sem logo ainda.
+- **Sistema visual = padrão de ferramenta operacional**, executado reto — sem
+  ironia, sem quirk. Barra de craft: Linear, Stripe Dashboard, Vercel Dashboard.
+  Decidido no `/impeccable shape` de 2026-09-07 (a alternativa do sorteio era
+  "gramática de fundo de casa"; a casa optou pela convenção). Paleta, face de UI
+  e tema escuro são definidos no build; `DESIGN.md` é escrito no finish.
 - Idioma pt-BR é compromisso, com linguagem simples e sem jargão de RH
   (alfabetização digital variável entre os profissionais).
 
