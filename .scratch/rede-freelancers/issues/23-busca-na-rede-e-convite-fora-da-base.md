@@ -5,12 +5,12 @@ envia proposta; o vínculo só se efetiva com o aceite do profissional.
 
 **Bloqueado por:** 22, 16, 14.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] Busca por função + raio + disponibilidade sobre os `PublicListing`, sem
+- [x] Busca por função + raio + disponibilidade sobre os `PublicListing`, sem
       score.
-- [ ] Enviar proposta cria `WorkRelationship` `PENDING_CONSENT`; nenhum acesso
+- [x] Enviar proposta cria `WorkRelationship` `PENDING_CONSENT`; nenhum acesso
       ao perfil antes do aceite.
-- [ ] Profissional aceita/recusa (reusa a tela "meus vínculos", 14).
-- [ ] Teste: empresa sem vínculo não lê disponibilidade nem endereço exato antes
+- [x] Profissional aceita/recusa (reusa a tela "meus vínculos", 14).
+- [x] Teste: empresa sem vínculo não lê disponibilidade nem endereço exato antes
       do aceite.

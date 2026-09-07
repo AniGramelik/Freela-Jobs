@@ -67,7 +67,7 @@ export async function loadSessionContext(
       select: { id: true },
     }),
   ]);
-  if (!user) return null;
+  if (!user || user.blockedAt) return null;
 
   const companies: CompanyOption[] = user.memberships
     .map((m) => ({ id: m.company.id, name: m.company.name, role: m.role }))

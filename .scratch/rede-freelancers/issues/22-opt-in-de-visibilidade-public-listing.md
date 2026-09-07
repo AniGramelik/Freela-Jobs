@@ -5,10 +5,10 @@ que expõe, e revoga quando quiser.
 
 **Bloqueado por:** 13, 19.
 
-**Status:** ready-for-agent
+**Status:** done
 
-- [ ] `PublicListing` com granularidade: funções, raio, campos exibidos.
+- [x] `PublicListing` com granularidade: funções, raio, campos exibidos.
       Consentimento específico e revogável (usa `Consent`).
-- [ ] Endereço aparece de forma aproximada (bairro) para empresas sem vínculo.
-- [ ] Revogar remove o perfil da busca na hora.
-- [ ] Teste: revogação tem efeito imediato; campos fora do opt-in não vazam.
+- [x] Endereço aparece de forma aproximada (bairro) para empresas sem vínculo.
+- [x] Revogar remove o perfil da busca na hora.
+- [x] Teste: revogação tem efeito imediato; campos fora do opt-in não vazam.
