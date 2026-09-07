@@ -15,7 +15,7 @@ export function PageShell({
   return (
     <div
       className={cn(
-        "mx-auto w-full px-4 py-6 sm:px-6 lg:px-8",
+        "fj-rise mx-auto w-full px-4 py-6 sm:px-6 lg:px-8",
         wide ? "max-w-6xl" : "max-w-4xl",
         className,
       )}
@@ -44,11 +44,11 @@ export function PageHeader({
       )}
     >
       <div className="min-w-0">
-        <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+        <h1 className="font-display text-[1.35rem] leading-tight font-semibold tracking-[-0.02em] text-fg">
           {title}
         </h1>
         {meta ? (
-          <div className="mt-1 text-sm text-fg-muted">{meta}</div>
+          <div className="mt-1.5 text-sm text-fg-muted">{meta}</div>
         ) : null}
       </div>
       {actions ? (
@@ -70,7 +70,7 @@ export function Panel({
   return (
     <section
       className={cn(
-        "rounded-lg border border-hairline bg-panel shadow-sm",
+        "rounded-xl border border-hairline bg-panel shadow-sm",
         padded && "p-4 sm:p-5",
         className,
       )}
@@ -82,7 +82,7 @@ export function Panel({
 
 export function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <h2 className="mb-2.5 text-[0.8125rem] font-semibold text-fg-muted">
+    <h2 className="mb-2.5 text-[0.8125rem] font-semibold tracking-[0.01em] text-fg-muted">
       {children}
     </h2>
   );
@@ -90,25 +90,31 @@ export function SectionLabel({ children }: { children: ReactNode }) {
 
 export function EmptyState({
   icon,
+  illustration,
   title,
   hint,
   action,
 }: {
   icon?: ReactNode;
+  illustration?: ReactNode;
   title: string;
   hint?: string;
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-lg border border-dashed border-hairline-strong bg-panel px-6 py-14 text-center">
-      {icon ? (
-        <div className="grid size-10 place-items-center rounded-full bg-panel-2 text-fg-subtle">
+    <div className="flex flex-col items-center gap-3 rounded-xl border border-dashed border-hairline-strong bg-brand-gradient-soft px-6 py-14 text-center">
+      {illustration ? (
+        <div className="mb-1 text-brand">{illustration}</div>
+      ) : icon ? (
+        <div className="grid size-11 place-items-center rounded-full border border-hairline bg-panel text-brand shadow-sm">
           {icon}
         </div>
       ) : null}
-      <p className="text-sm font-medium text-fg">{title}</p>
+      <p className="font-display text-base font-semibold text-fg">{title}</p>
       {hint ? (
-        <p className="max-w-xs text-[0.8125rem] text-fg-subtle">{hint}</p>
+        <p className="max-w-xs text-[0.8125rem] leading-relaxed text-fg-subtle">
+          {hint}
+        </p>
       ) : null}
       {action ? <div className="mt-1">{action}</div> : null}
     </div>

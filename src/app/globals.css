@@ -1,19 +1,23 @@
 @import "tailwindcss";
 
 /* ------------------------------------------------------------------ *
- * Freela Jobs — sistema visual: convenção de ferramenta operacional
- * (barra Linear / Stripe / Vercel). Claro primeiro; tema escuro real.
+ * Freela Jobs — sistema visual: identidade editorial da marca.
+ * Tinta = navio (navy); acento = teal do logo. Gradiente navy→teal é
+ * o gesto da marca. Serifa de display (Fraunces) para as vozes altas;
+ * Geist Sans para tudo que é denso. Claro primeiro; a noite vira navy.
  * ------------------------------------------------------------------ */
 
 @theme {
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system,
     "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
 
   --radius-xs: 0.25rem;
   --radius-sm: 0.375rem;
   --radius-md: 0.5rem;
   --radius-lg: 0.75rem;
+  --radius-xl: 1.125rem;
   --radius-full: 9999px;
 
   /* semantic tokens resolve through :root / dark below */
@@ -26,9 +30,12 @@
   --color-fg-muted: var(--sem-fg-muted);
   --color-fg-subtle: var(--sem-fg-subtle);
   --color-fg-onbrand: var(--sem-fg-onbrand);
+  --color-ink: var(--sem-ink);
+  --color-ink-2: var(--sem-ink-2);
   --color-brand: var(--sem-brand);
   --color-brand-hover: var(--sem-brand-hover);
   --color-brand-soft: var(--sem-brand-soft);
+  --color-accent: var(--sem-accent);
   --color-ring: var(--sem-ring);
   --color-pos: var(--sem-pos);
   --color-pos-soft: var(--sem-pos-soft);
@@ -37,83 +44,130 @@
   --color-pend: var(--sem-pend);
   --color-pend-soft: var(--sem-pend-soft);
 
-  --shadow-sm: 0 1px 2px oklch(0.2 0.03 260 / 0.06),
-    0 1px 3px oklch(0.2 0.03 260 / 0.05);
-  --shadow-md: 0 2px 6px oklch(0.2 0.03 260 / 0.08),
-    0 4px 16px oklch(0.2 0.03 260 / 0.06);
-  --shadow-pop: 0 4px 12px oklch(0.2 0.03 260 / 0.1),
-    0 12px 32px oklch(0.2 0.03 260 / 0.12);
+  --shadow-sm: 0 1px 2px oklch(0.28 0.05 245 / 0.07),
+    0 1px 3px oklch(0.28 0.05 245 / 0.06);
+  --shadow-md: 0 2px 8px oklch(0.28 0.05 245 / 0.09),
+    0 6px 20px oklch(0.28 0.05 245 / 0.07);
+  --shadow-pop: 0 6px 16px oklch(0.28 0.05 245 / 0.12),
+    0 20px 44px oklch(0.28 0.05 245 / 0.16);
 }
 
 :root {
   color-scheme: light;
-  --sem-canvas: oklch(0.985 0.002 255);
+  --sem-canvas: oklch(0.987 0.004 240);
   --sem-panel: #ffffff;
-  --sem-panel-2: oklch(0.975 0.003 255);
-  --sem-hairline: oklch(0.922 0.004 255);
-  --sem-hairline-strong: oklch(0.86 0.005 255);
-  --sem-fg: oklch(0.24 0.012 260);
-  --sem-fg-muted: oklch(0.46 0.01 260);
-  --sem-fg-subtle: oklch(0.6 0.008 260);
+  --sem-panel-2: oklch(0.973 0.006 240);
+  --sem-hairline: oklch(0.915 0.008 240);
+  --sem-hairline-strong: oklch(0.85 0.012 240);
+  --sem-fg: oklch(0.26 0.031 248);
+  --sem-fg-muted: oklch(0.47 0.024 246);
+  --sem-fg-subtle: oklch(0.605 0.019 244);
   --sem-fg-onbrand: #ffffff;
-  --sem-brand: oklch(0.55 0.188 249);
-  --sem-brand-hover: oklch(0.48 0.188 249);
-  --sem-brand-soft: oklch(0.955 0.038 249);
-  --sem-ring: oklch(0.6 0.19 249);
-  --sem-pos: oklch(0.52 0.13 150);
-  --sem-pos-soft: oklch(0.955 0.04 150);
+  --sem-ink: oklch(0.3 0.062 248);
+  --sem-ink-2: oklch(0.38 0.058 246);
+  --sem-brand: oklch(0.5 0.108 176);
+  --sem-brand-hover: oklch(0.43 0.104 176);
+  --sem-brand-soft: oklch(0.955 0.035 176);
+  --sem-accent: oklch(0.7 0.129 172);
+  --sem-ring: oklch(0.58 0.11 176);
+  --sem-pos: oklch(0.52 0.14 150);
+  --sem-pos-soft: oklch(0.955 0.042 150);
   --sem-neg: oklch(0.53 0.2 25);
   --sem-neg-soft: oklch(0.96 0.03 25);
   --sem-pend: oklch(0.62 0.13 75);
   --sem-pend-soft: oklch(0.96 0.05 80);
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    var(--sem-ink) 0%,
+    oklch(0.34 0.07 218) 46%,
+    var(--sem-accent) 122%
+  );
+  --gradient-brand-soft: linear-gradient(
+    135deg,
+    oklch(0.965 0.02 240) 0%,
+    oklch(0.955 0.035 176) 100%
+  );
+  /* grão sutil — só em capas e no painel de auth */
+  --texture-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --sem-canvas: oklch(0.18 0.008 260);
-    --sem-panel: oklch(0.215 0.009 260);
-    --sem-panel-2: oklch(0.245 0.01 260);
-    --sem-hairline: oklch(0.31 0.011 260);
-    --sem-hairline-strong: oklch(0.4 0.012 260);
-    --sem-fg: oklch(0.94 0.006 260);
-    --sem-fg-muted: oklch(0.72 0.012 260);
-    --sem-fg-subtle: oklch(0.58 0.012 260);
-    --sem-fg-onbrand: #ffffff;
-    --sem-brand: oklch(0.66 0.172 249);
-    --sem-brand-hover: oklch(0.73 0.16 249);
-    --sem-brand-soft: oklch(0.32 0.072 249);
-    --sem-ring: oklch(0.7 0.17 249);
-    --sem-pos: oklch(0.72 0.14 150);
-    --sem-pos-soft: oklch(0.32 0.06 150);
-    --sem-neg: oklch(0.68 0.17 25);
-    --sem-neg-soft: oklch(0.33 0.08 25);
-    --sem-pend: oklch(0.76 0.13 80);
-    --sem-pend-soft: oklch(0.34 0.06 80);
+    --sem-canvas: oklch(0.205 0.033 250);
+    --sem-panel: oklch(0.245 0.033 250);
+    --sem-panel-2: oklch(0.28 0.034 250);
+    --sem-hairline: oklch(0.36 0.032 250);
+    --sem-hairline-strong: oklch(0.46 0.034 250);
+    --sem-fg: oklch(0.95 0.012 235);
+    --sem-fg-muted: oklch(0.75 0.018 240);
+    --sem-fg-subtle: oklch(0.62 0.018 242);
+    --sem-fg-onbrand: oklch(0.16 0.03 250);
+    --sem-ink: oklch(0.9 0.03 235);
+    --sem-ink-2: oklch(0.8 0.03 238);
+    --sem-brand: oklch(0.74 0.13 174);
+    --sem-brand-hover: oklch(0.8 0.12 174);
+    --sem-brand-soft: oklch(0.34 0.07 180);
+    --sem-accent: oklch(0.76 0.14 172);
+    --sem-ring: oklch(0.76 0.13 174);
+    --sem-pos: oklch(0.74 0.15 150);
+    --sem-pos-soft: oklch(0.34 0.07 150);
+    --sem-neg: oklch(0.7 0.17 25);
+    --sem-neg-soft: oklch(0.35 0.09 25);
+    --sem-pend: oklch(0.78 0.13 80);
+    --sem-pend-soft: oklch(0.36 0.07 80);
+
+    --gradient-brand: linear-gradient(
+      135deg,
+      oklch(0.28 0.06 250) 0%,
+      oklch(0.34 0.08 210) 44%,
+      oklch(0.5 0.12 174) 120%
+    );
+    --gradient-brand-soft: linear-gradient(
+      135deg,
+      oklch(0.27 0.035 250) 0%,
+      oklch(0.32 0.06 190) 100%
+    );
   }
 }
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --sem-canvas: oklch(0.18 0.008 260);
-  --sem-panel: oklch(0.215 0.009 260);
-  --sem-panel-2: oklch(0.245 0.01 260);
-  --sem-hairline: oklch(0.31 0.011 260);
-  --sem-hairline-strong: oklch(0.4 0.012 260);
-  --sem-fg: oklch(0.94 0.006 260);
-  --sem-fg-muted: oklch(0.72 0.012 260);
-  --sem-fg-subtle: oklch(0.58 0.012 260);
-  --sem-fg-onbrand: #ffffff;
-  --sem-brand: oklch(0.66 0.172 249);
-  --sem-brand-hover: oklch(0.73 0.16 249);
-  --sem-brand-soft: oklch(0.32 0.072 249);
-  --sem-ring: oklch(0.7 0.17 249);
-  --sem-pos: oklch(0.72 0.14 150);
-  --sem-pos-soft: oklch(0.32 0.06 150);
-  --sem-neg: oklch(0.68 0.17 25);
-  --sem-neg-soft: oklch(0.33 0.08 25);
-  --sem-pend: oklch(0.76 0.13 80);
-  --sem-pend-soft: oklch(0.34 0.06 80);
+  --sem-canvas: oklch(0.205 0.033 250);
+  --sem-panel: oklch(0.245 0.033 250);
+  --sem-panel-2: oklch(0.28 0.034 250);
+  --sem-hairline: oklch(0.36 0.032 250);
+  --sem-hairline-strong: oklch(0.46 0.034 250);
+  --sem-fg: oklch(0.95 0.012 235);
+  --sem-fg-muted: oklch(0.75 0.018 240);
+  --sem-fg-subtle: oklch(0.62 0.018 242);
+  --sem-fg-onbrand: oklch(0.16 0.03 250);
+  --sem-ink: oklch(0.9 0.03 235);
+  --sem-ink-2: oklch(0.8 0.03 238);
+  --sem-brand: oklch(0.74 0.13 174);
+  --sem-brand-hover: oklch(0.8 0.12 174);
+  --sem-brand-soft: oklch(0.34 0.07 180);
+  --sem-accent: oklch(0.76 0.14 172);
+  --sem-ring: oklch(0.76 0.13 174);
+  --sem-pos: oklch(0.74 0.15 150);
+  --sem-pos-soft: oklch(0.34 0.07 150);
+  --sem-neg: oklch(0.7 0.17 25);
+  --sem-neg-soft: oklch(0.35 0.09 25);
+  --sem-pend: oklch(0.78 0.13 80);
+  --sem-pend-soft: oklch(0.36 0.07 80);
+
+  --gradient-brand: linear-gradient(
+    135deg,
+    oklch(0.28 0.06 250) 0%,
+    oklch(0.34 0.08 210) 44%,
+    oklch(0.5 0.12 174) 120%
+  );
+  --gradient-brand-soft: linear-gradient(
+    135deg,
+    oklch(0.27 0.035 250) 0%,
+    oklch(0.32 0.06 190) 100%
+  );
 }
 
 @layer base {
@@ -134,8 +188,14 @@
     letter-spacing: -0.006em;
   }
 
+  h1,
+  h2,
+  h3 {
+    font-feature-settings: normal;
+  }
+
   ::selection {
-    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+    background: color-mix(in oklch, var(--color-accent) 30%, transparent);
     color: var(--color-fg);
   }
 
@@ -186,27 +246,62 @@
   font-feature-settings: "tnum" 1;
 }
 
+/* Gradiente da marca como fundo. */
+@utility bg-brand-gradient {
+  background-image: var(--gradient-brand);
+}
+@utility bg-brand-gradient-soft {
+  background-image: var(--gradient-brand-soft);
+}
+
+/* Camada de grão sobre um elemento posicionado (capas, painel de auth). */
+.fj-grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--texture-grain);
+  background-size: 140px 140px;
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
 @keyframes fj-pulse-in {
   0% {
-    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+    background: color-mix(in oklch, var(--color-accent) 24%, transparent);
   }
   22% {
-    background: color-mix(in oklch, var(--color-brand) 26%, transparent);
+    background: color-mix(in oklch, var(--color-accent) 24%, transparent);
   }
   100% {
     background: transparent;
   }
 }
 
-/* Landing highlight for a row/tally whose state just changed. The color
-   arrives instantly and settles on a single 140 ms ease; the hold that
-   follows only lets the eye catch it. */
+/* Realce de pouso: cor chega instantânea e assenta num único ease de
+   ~140 ms; a espera depois só deixa o olho alcançar. */
 .fj-land {
   animation: fj-pulse-in 620ms cubic-bezier(0.33, 1, 0.68, 1);
 }
 
+/* Entrada do conteúdo da rota. */
+@keyframes fj-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fj-rise {
+  animation: fj-rise 380ms cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .fj-land {
+  .fj-land,
+  .fj-rise {
     animation: none;
   }
 }

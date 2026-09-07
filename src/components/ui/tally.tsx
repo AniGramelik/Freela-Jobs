@@ -2,7 +2,8 @@ import { cn } from "@/lib/cn";
 
 /**
  * Placar de vagas — o elemento focal do detalhe da convocação.
- * Numeral grande em fonte tabular, com uma barra fina de preenchimento.
+ * Numeral grande em serifa de display; barra fina de preenchimento
+ * que vira o gradiente da marca quando fecha.
  */
 export function Tally({
   filled,
@@ -23,7 +24,7 @@ export function Tally({
       <div className="flex items-baseline gap-1">
         <span
           className={cn(
-            "tnum text-3xl font-semibold leading-none tracking-[-0.02em]",
+            "font-display text-[2rem] leading-none font-semibold tracking-[-0.02em]",
             done ? "text-pos" : "text-fg",
           )}
         >
@@ -34,11 +35,11 @@ export function Tally({
         </span>
         <span className="ml-1 text-[0.8125rem] text-fg-subtle">{label}</span>
       </div>
-      <div className="h-1 w-28 overflow-hidden rounded-full bg-hairline">
+      <div className="h-1.5 w-28 overflow-hidden rounded-full bg-hairline">
         <div
           className={cn(
             "h-full rounded-full transition-[width] duration-150 ease-out motion-reduce:transition-none",
-            done ? "bg-pos" : "bg-brand",
+            done ? "bg-brand-gradient" : "bg-brand",
           )}
           style={{ width: `${pct}%` }}
         />

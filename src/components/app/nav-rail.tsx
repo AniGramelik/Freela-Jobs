@@ -12,6 +12,7 @@ import {
   Users,
 } from "lucide-react";
 
+import { Logo } from "@/components/brand/logo";
 import { cn } from "@/lib/cn";
 
 export type NavItem = { href: string; label: string; icon: string };
@@ -50,14 +51,12 @@ export function NavRail({
   return (
     <nav className="fixed inset-x-0 top-0 z-30 border-b border-hairline bg-panel/85 backdrop-blur-sm lg:inset-y-0 lg:right-auto lg:w-60 lg:border-r lg:border-b-0">
       <div className="flex h-14 items-center gap-2 px-4 lg:h-auto lg:flex-col lg:items-stretch lg:px-3 lg:py-4">
-        <div className="flex items-center gap-2 lg:mb-3 lg:px-1">
-          <span className="grid size-6 place-items-center rounded-md bg-brand text-[0.7rem] font-bold text-fg-onbrand">
-            F
-          </span>
-          <span className="text-sm font-semibold tracking-[-0.01em]">
-            Freela Jobs
-          </span>
-        </div>
+        <Link
+          href="/painel"
+          className="flex items-center no-underline lg:mb-3 lg:px-1"
+        >
+          <Logo variant="full" size={22} />
+        </Link>
 
         <div className="hidden lg:block lg:px-1 lg:pb-3">{header}</div>
 
@@ -73,7 +72,7 @@ export function NavRail({
                   className={cn(
                     "flex items-center gap-2 rounded-md px-2.5 py-1.5 text-[0.8125rem] font-medium transition-colors",
                     active
-                      ? "bg-brand-soft text-brand"
+                      ? "bg-brand-soft text-brand shadow-[inset_2px_0_0_var(--color-brand)]"
                       : "text-fg-muted hover:bg-panel-2 hover:text-fg",
                   )}
                 >

@@ -2,6 +2,8 @@
 
 import { useEffect } from "react";
 
+import { Logo } from "@/components/brand/logo";
+
 import "./globals.css";
 
 /**
@@ -28,19 +30,17 @@ export default function GlobalError({
     <html lang="pt-BR">
       <body>
         <main className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-6 py-14">
-          <span className="grid size-6 place-items-center rounded-md bg-brand text-[0.7rem] font-bold text-fg-onbrand">
-            F
-          </span>
-          <h1 className="mt-8 text-xl font-semibold tracking-[-0.015em] text-fg">
+          <Logo variant="mark" size={30} />
+          <h1 className="mt-8 font-display text-[1.5rem] font-semibold tracking-[-0.02em] text-fg">
             Algo deu errado
           </h1>
-          <p className="mt-1.5 text-[0.875rem] leading-relaxed text-fg-muted">
+          <p className="mt-2 text-[0.9375rem] leading-relaxed text-fg-muted">
             Tente de novo. Se persistir, avise o suporte.
           </p>
           <button
             type="button"
             onClick={() => reset()}
-            className="mt-6 inline-flex h-9 w-fit items-center justify-center rounded-md bg-brand px-3.5 text-sm font-medium text-fg-onbrand transition-colors hover:bg-brand-hover"
+            className="mt-6 inline-flex h-10 w-fit items-center justify-center rounded-md bg-brand-gradient px-4 text-sm font-medium text-white shadow-md transition hover:brightness-[1.06]"
           >
             Tentar de novo
           </button>
