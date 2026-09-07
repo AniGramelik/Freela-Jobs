@@ -55,7 +55,7 @@ export default async function DisponibilidadePage() {
 
   return (
     <main className="grid gap-4 px-4 py-6">
-      <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+      <h1 className="font-display text-[1.3rem] font-semibold tracking-[-0.02em] text-fg">
         Sua disponibilidade
       </h1>
 

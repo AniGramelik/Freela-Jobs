@@ -52,7 +52,7 @@ export default async function ProfRedePage() {
   return (
     <main className="grid gap-4 px-4 py-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+        <h1 className="font-display text-[1.3rem] font-semibold tracking-[-0.02em] text-fg">
           Rede local
         </h1>
         <StatusPill tone={active ? "pos" : "neutral"}>

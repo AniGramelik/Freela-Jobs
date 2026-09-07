@@ -49,7 +49,7 @@ export default async function ProfConvocacoesPage() {
 
   return (
     <div className="px-4 py-5">
-      <h1 className="mb-4 text-lg font-semibold tracking-[-0.01em]">
+      <h1 className="mb-4 font-display text-[1.3rem] font-semibold tracking-[-0.02em]">
         Convocações
       </h1>
 

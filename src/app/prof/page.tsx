@@ -29,7 +29,7 @@ export default async function ProfPage() {
 
   return (
     <main className="px-4 py-6">
-      <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+      <h1 className="font-display text-[1.3rem] font-semibold tracking-[-0.02em] text-fg">
         Seu perfil
       </h1>
       <p className="mt-1 text-sm text-fg-muted">{user.email}</p>

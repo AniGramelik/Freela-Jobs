@@ -59,7 +59,7 @@ export default async function VagaDetalhePage({
       </Link>
 
       <div>
-        <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">
+        <h1 className="font-display text-[1.3rem] font-semibold tracking-[-0.02em] text-fg">
           {job.title}
         </h1>
         <p className="mt-1 text-[0.8125rem] text-fg-muted">

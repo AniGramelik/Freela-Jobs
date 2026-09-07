@@ -13,7 +13,7 @@ export default async function ProfLayout({
   await requireSession();
   return (
     <div className="min-h-dvh pb-16">
-      <div className="mx-auto w-full max-w-md">{children}</div>
+      <div className="fj-rise mx-auto w-full max-w-md">{children}</div>
       <TabBar />
     </div>
   );

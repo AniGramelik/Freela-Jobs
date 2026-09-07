@@ -28,7 +28,7 @@ export default async function ProfVagasPage({
 
   return (
     <main className="grid gap-4 px-4 py-6">
-      <h1 className="text-lg font-semibold tracking-[-0.01em] text-fg">Vagas</h1>
+      <h1 className="font-display text-[1.3rem] font-semibold tracking-[-0.02em] text-fg">Vagas</h1>
 
       <form method="get" className="grid gap-2">
         <div className="grid grid-cols-[1fr_4rem] gap-2">
